@@ -1,6 +1,14 @@
 ﻿namespace Aliencube.Azure.Insights.WebTests.Models
 {
-    public class WebTestConfiguration
+    public abstract class WebTestConfiguration
+    {
+    }
+
+    public class PingWebTestConfiguration : WebTestConfiguration
+    {
+    }
+
+    public class MultiStepWebTestConfiguration : WebTestConfiguration
     {
     }
 }

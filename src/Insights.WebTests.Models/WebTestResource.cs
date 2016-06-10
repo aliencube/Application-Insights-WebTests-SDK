@@ -42,7 +42,38 @@ namespace Aliencube.Azure.Insights.WebTests.Models
 
             this._insights = insights;
 
+            this._testType = testType;
+
             this.Initialise();
+        }
+
+        /// <summary>
+        /// Creates a new instance of the web test properties inheriting the <see cref="WebTestProperties"/> class.
+        /// </summary>
+        /// <param name="testLocations"><see cref="TestLocations"/> value.</param>
+        /// <param name="testStatus"><see cref="TestStatus"/> value.</param>
+        /// <param name="testFrequency"><see cref="TestFrequency"/> value.</param>
+        /// <param name="testTimeout"><see cref="TestTimeout"/> value.</param>
+        /// <param name="retriesForWebTestFailure"><see cref="RetriesForWebTestFailure"/> value.</param>
+        public void CreateWebTestProperties(TestLocations testLocations, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, RetriesForWebTestFailure retriesForWebTestFailure)
+        {
+            WebTestProperties properties;
+            switch (this._testType)
+            {
+                case WebTestType.UrlPingTest:
+                    properties = this.CreatePingWebTestProperties(testLocations, testStatus, testFrequency, testTimeout, retriesForWebTestFailure);
+                    break;
+
+                case WebTestType.MultiStepTest:
+                    properties = new MultiStepWebTestProperties();
+                    break;
+
+                default:
+                    properties = null;
+                    break;
+            }
+
+            this.Properties = properties;
         }
 
         private void Initialise()
@@ -52,47 +83,23 @@ namespace Aliencube.Azure.Insights.WebTests.Models
 
             this.Location = this._insights.Location;
             this.Tags.Add($"hidden-link:{this._insights.Id}", "Resource");
-
-            this.Properties = this.CreateWebTestProperties();
         }
 
-        private WebTestProperties CreateWebTestProperties()
-        {
-            switch (this._testType)
-            {
-                case WebTestType.UrlPingTest:
-                    return this.CreatePingWebTestProperties();
-
-                case WebTestType.MultiStepTest:
-                    return new MultiStepWebTestProperties();
-
-                default:
-                    return null;
-            }
-        }
-
-        private PingWebTestProperties CreatePingWebTestProperties()
+        private PingWebTestProperties CreatePingWebTestProperties(TestLocations testLocations, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, RetriesForWebTestFailure retriesForWebTestFailure)
         {
             var properties = new PingWebTestProperties()
                                  {
                                      Name = this._name,
-                                     TestStatus = WebTestStatus.Enabled,
-                                     TestFrequency = TestFrequency._5Minutes,
-                                     TestTimeout = TestTimeout._120Seconds,
-                                     Kind = WebTestKind.Ping,
-                                     EnableRetriesForWebTestFailure = RetriesForWebTestFailure.Enable,
-                                     Locations = { },
-                                     Configuration = null,
+                                     TestStatus = testStatus,
+                                     TestFrequency = testFrequency,
+                                     TestTimeout = testTimeout,
+                                     Kind = TestKind.Ping,
+                                     EnableRetriesForWebTestFailure = retriesForWebTestFailure,
+                                     Locations = WebTestLocations.GetWebTestLocations(testLocations),
+                                     Configuration = new PingWebTestConfiguration(),
                                      SyntheticMonitorId = this._syntheticMonitorId,
                                  };
             return properties;
         }
-    }
-
-
-    public enum RetriesForWebTestFailure
-    {
-        Disable = 0,
-        Enable = 1,
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// This specifies the web test status.
     /// </summary>
-    public enum WebTestStatus
+    public enum TestStatus
     {
         /// <summary>
         /// Identifies the web test is disabled.

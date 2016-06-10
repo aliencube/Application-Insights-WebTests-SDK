@@ -31,15 +31,15 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets the web test status whether it's enabled or disabled. This is a caculated value from <see cref="WebTestStatus"/>.
+        /// Gets the web test status whether it's enabled or disabled. This is a caculated value from <see cref="Models.TestStatus"/>.
         /// </summary>
-        public bool Enabled => this.TestStatus == WebTestStatus.Enabled;
+        public bool Enabled => this.TestStatus == TestStatus.Enabled;
 
         /// <summary>
         /// Gets or sets the web test status whether it's enabled or disabled.
         /// </summary>
         [JsonIgnore]
-        public WebTestStatus TestStatus { get; set; }
+        public TestStatus TestStatus { get; set; }
 
         /// <summary>
         /// Gets the test frequency value in seconds. This is a calculated value from <see cref="TestFrequency"/>.
@@ -66,7 +66,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         /// <summary>
         /// Gets or sets the web test kind.
         /// </summary>
-        public abstract string Kind { get; set; }
+        public string Kind { get; set; }
 
         /// <summary>
         /// Gets the value indicating whether to enable retries when the web test fails. This is a calculated value from <see cref="EnableRetriesForWebTestFailure"/>.

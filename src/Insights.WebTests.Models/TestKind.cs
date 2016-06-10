@@ -3,7 +3,7 @@
     /// <summary>
     /// This specifies the web test kind value.
     /// </summary>
-    public class WebTestKind
+    public class TestKind
     {
         /// <summary>
         /// Indicates "ping".
