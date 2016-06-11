@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Hyak.Common;
@@ -96,6 +97,11 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Options
         /// <returns>Returns the list of the <see cref="WebTestLocation"/> objects.</returns>
         public static IList<WebTestLocation> GetWebTestLocations(TestLocations locations)
         {
+            if (locations == TestLocations.None)
+            {
+                throw new ArgumentException("Invalid test locations");
+            }
+
             var results = new LazyList<WebTestLocation>();
             if (locations.HasFlag(TestLocations.UsIlChicago))
             {
