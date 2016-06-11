@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aliencube.Azure.Insights.WebTests.Models
+namespace Aliencube.Azure.Insights.WebTests.Models.Options
 {
     /// <summary>
     /// This represents the location entity for web test.

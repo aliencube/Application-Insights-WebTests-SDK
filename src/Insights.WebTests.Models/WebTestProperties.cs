@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Aliencube.Azure.Insights.WebTests.Models.Options;
+
 using Hyak.Common;
 
 using Newtonsoft.Json;
@@ -31,7 +33,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets the web test status whether it's enabled or disabled. This is a caculated value from <see cref="Models.TestStatus"/>.
+        /// Gets the web test status whether it's enabled or disabled. This is a caculated value from <see cref="Options.TestStatus"/>.
         /// </summary>
         public bool Enabled => this.TestStatus == TestStatus.Enabled;
 

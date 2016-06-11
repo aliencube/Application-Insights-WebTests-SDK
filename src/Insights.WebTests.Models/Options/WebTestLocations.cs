@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Hyak.Common;
 
-namespace Aliencube.Azure.Insights.WebTests.Models
+namespace Aliencube.Azure.Insights.WebTests.Models.Options
 {
     /// <summary>
     /// This represents the locations entity for web test.

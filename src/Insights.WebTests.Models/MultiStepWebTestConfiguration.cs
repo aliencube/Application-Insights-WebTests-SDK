@@ -1,13 +1,13 @@
 ﻿namespace Aliencube.Azure.Insights.WebTests.Models
 {
     /// <summary>
-    /// This represents the configuration entity for web test. This MUST be inherited.
+    /// This represents the configuration entity for multi-step web test.
     /// </summary>
-    public abstract class WebTestConfiguration
+    public class MultiStepWebTestConfiguration : WebTestConfiguration
     {
         /// <summary>
         /// Gets the web test XML serialised value.
         /// </summary>
-        public abstract string WebTest { get; }
+        public override string WebTest { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Aliencube.Azure.Insights.WebTests.Models
+﻿namespace Aliencube.Azure.Insights.WebTests.Models.Options
 {
     /// <summary>
     /// This specifies the test timeout in seconds.
