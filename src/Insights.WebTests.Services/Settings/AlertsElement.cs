@@ -38,7 +38,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <summary>
         /// Gets or sets the value indicating whether the the alert status is enabled or not.
         /// </summary>
-        [ConfigurationProperty("statusEnabled", IsRequired = true, DefaultValue = true)]
+        [ConfigurationProperty("statusEnabled", IsRequired = true, DefaultValue = TestStatus.Enabled)]
         [TypeConverter(typeof(CaseInsensitiveEnumConverter<TestStatus>))]
         public TestStatus TestStatus
         {

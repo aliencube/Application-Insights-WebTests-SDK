@@ -60,7 +60,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <summary>
         /// Gets or sets the value indicating whether to enable retries when failure.
         /// </summary>
-        [ConfigurationProperty("retriesForWebTestFailure", IsRequired = true, DefaultValue = true)]
+        [ConfigurationProperty("retriesForWebTestFailure", IsRequired = true, DefaultValue = RetriesForWebTestFailure.Enable)]
         [TypeConverter(typeof(CaseInsensitiveEnumConverter<RetriesForWebTestFailure>))]
         public RetriesForWebTestFailure RetriesForWebTestFailure
         {
