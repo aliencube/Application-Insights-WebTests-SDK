@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F0B62FA5-95AD-4EEE-8AAB-5232675146A4}</ProjectGuid>
+    <ProjectGuid>{B9BB893A-7400-43B6-8AF1-F73199820F82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aliencube.Azure.Insights.WebTests.Models.Tests</RootNamespace>
-    <AssemblyName>Aliencube.Azure.Insights.WebTests.Models.Tests</AssemblyName>
+    <RootNamespace>Aliencube.Azure.Insights.WebTests.Services.Tests</RootNamespace>
+    <AssemblyName>Aliencube.Azure.Insights.WebTests.Services.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -97,22 +97,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PingWebTestConfigurationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebTestLocationsTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Insights.WebTests.Models\Insights.WebTests.Models.csproj">
       <Project>{d275254c-11cd-43ac-a0da-c1f31bd38ded}</Project>
       <Name>Insights.WebTests.Models</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fixtures\" />
+    <ProjectReference Include="..\..\src\Insights.WebTests.Services\Insights.WebTests.Services.csproj">
+      <Project>{db2b56a6-4c94-463d-a2a2-8ee56a138610}</Project>
+      <Name>Insights.WebTests.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

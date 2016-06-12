@@ -4,7 +4,7 @@ using System.Configuration;
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
 
-namespace Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings
+namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {
     /// <summary>
     /// This represents the configuration element for the success criteria.

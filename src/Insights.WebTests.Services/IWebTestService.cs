@@ -1,15 +1,14 @@
 using System;
 using System.Threading.Tasks;
 
-using Aliencube.Azure.Insights.WebTests.ConsoleApp;
-using Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings;
+using Aliencube.Azure.Insights.WebTests.Services.Settings;
 
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Insights;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
 
-namespace Sposs.WebTests.ConsoleApp
+namespace Aliencube.Azure.Insights.WebTests.Services
 {
     /// <summary>
     /// This provides interfaces to the <see cref="WebTestService"/> class.

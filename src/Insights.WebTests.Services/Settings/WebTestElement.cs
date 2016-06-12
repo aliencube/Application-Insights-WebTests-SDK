@@ -7,7 +7,7 @@ using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.ConfigurationConverters;
 
-namespace Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings
+namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {
     /// <summary>
     /// This represents the configuration element entity for web test.

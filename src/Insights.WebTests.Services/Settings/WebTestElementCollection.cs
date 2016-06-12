@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Linq;
 
-namespace Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings
+namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {
     /// <summary>
     /// Gets or sets the configuration element collection entity for web tests.

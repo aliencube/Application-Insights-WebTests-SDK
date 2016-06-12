@@ -4,18 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9C9C0FA4-7EE0-45C4-894E-819FBF749712}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{DB2B56A6-4C94-463D-A2A2-8EE56A138610}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aliencube.Azure.Insights.WebTests.ConsoleApp</RootNamespace>
-    <AssemblyName>Aliencube.Azure.Insights.WebTests.ConsoleApp</AssemblyName>
+    <RootNamespace>Aliencube.Azure.Insights.WebTests.Services</RootNamespace>
+    <AssemblyName>Aliencube.Azure.Insights.WebTests.Services</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -139,16 +137,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="IWebTestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\AlertsElement.cs" />
+    <Compile Include="Settings\ApplicationInsightsElement.cs" />
+    <Compile Include="Settings\AuthenticationElement.cs" />
+    <Compile Include="Settings\BaseConfigElement.cs" />
+    <Compile Include="Settings\IWebTestSettingsElement.cs" />
+    <Compile Include="Settings\SucessCriteriaElement.cs" />
+    <Compile Include="Settings\WebTestElement.cs" />
+    <Compile Include="Settings\WebTestElementCollection.cs" />
+    <Compile Include="Settings\WebTestSettingsElement.cs" />
+    <Compile Include="WebTestService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Insights.WebTests.Models\Insights.WebTests.Models.csproj">

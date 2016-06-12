@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings
+namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {
     /// <summary>
     /// This provides the interfaces to the <see cref="WebTestSettingsElement"/> class.

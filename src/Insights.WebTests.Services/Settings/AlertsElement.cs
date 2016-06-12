@@ -7,7 +7,7 @@ using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.ConfigurationConverters;
 
-namespace Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings
+namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {
     /// <summary>
     /// This represents the configuration element for the alerts.
@@ -36,7 +36,7 @@ namespace Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings
         }
 
         /// <summary>
-        /// Gets or sets the value indicating whether to enable the alert status or not.
+        /// Gets or sets the value indicating whether the the alert status is enabled or not.
         /// </summary>
         [ConfigurationProperty("statusEnabled", IsRequired = true, DefaultValue = true)]
         [TypeConverter(typeof(CaseInsensitiveEnumConverter<TestStatus>))]
@@ -45,6 +45,11 @@ namespace Aliencube.Azure.Insights.WebTests.ConsoleApp.Settings
             get { return (TestStatus)this["statusEnabled"]; }
             set { this["statusEnabled"] = value; }
         }
+
+        /// <summary>
+        /// Gets the value indicating whether the the alert status is enabled or not.
+        /// </summary>
+        public bool IsEnabled => this.TestStatus == TestStatus.Enabled;
 
         /// <summary>
         /// Gets or sets the thershold value for alter locations.
