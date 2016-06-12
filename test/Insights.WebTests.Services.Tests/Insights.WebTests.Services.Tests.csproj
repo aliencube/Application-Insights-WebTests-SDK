@@ -98,8 +98,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fixtures\WebTestServiceFixture.cs" />
     <Compile Include="Fixtures\WebTestSettingsElementFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebTestServiceTest.cs" />
     <Compile Include="WebTestSettingsElementTest.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         {
             this.ClientId = element.ClientId;
             this.ClientSecret = element.ClientSecret;
+            this.UseServicePrinciple = element.UseServicePrinciple;
             this.TenantName = element.TenantName;
             this.AadInstanceUrl = element.AadInstanceUrl;
             this.ManagementInstanceUrl = element.ManagementInstanceUrl;
@@ -40,11 +41,21 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <summary>
         /// Gets or sets the client secret.
         /// </summary>
-        [ConfigurationProperty("clientSecret", IsRequired = true)]
+        [ConfigurationProperty("clientSecret", IsRequired = false)]
         public string ClientSecret
         {
             get { return (string)this["clientSecret"]; }
             set { this["clientSecret"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the value indicating whether to use service principle or not.
+        /// </summary>
+        [ConfigurationProperty("useServicePrinciple", IsRequired = true, DefaultValue = false)]
+        public bool UseServicePrinciple
+        {
+            get { return (bool)this["useServicePrinciple"]; }
+            set { this["useServicePrinciple"] = value; }
         }
 
         /// <summary>

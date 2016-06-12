@@ -42,6 +42,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         {
             this._auth.ClientId.Should().BeEquivalentTo("[CLIENT_ID]");
             this._auth.ClientSecret.Should().BeEquivalentTo("[CLIENT_SECRET]");
+            this._auth.UseServicePrinciple.Should().BeFalse();
             this._auth.TenantName.Should().BeEquivalentTo("[TENANT_NAME]");
         }
 

@@ -27,30 +27,30 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns the <see cref="SubscriptionCloudCredentials"/> instance as Azure subscription credentials.</returns>
         Task<SubscriptionCloudCredentials> GetCredentialsAsync();
 
-        /// <summary>
-        /// Gets the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.
-        /// </summary>
-        /// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
-        /// <returns>Returns the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.</returns>
-        Task<GenericResourceExtended> GetInsightsResourceAsync(IResourceManagementClient client);
+        ///// <summary>
+        ///// Gets the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.
+        ///// </summary>
+        ///// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
+        ///// <returns>Returns the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.</returns>
+        //Task<GenericResourceExtended> GetInsightsResourceAsync(IResourceManagementClient client);
 
-        /// <summary>
-        /// Creates or updates web test resource.
-        /// </summary>
-        /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
-        /// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
-        /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
-        /// <returns>Returns the <see cref="GenericResourceExtended"/> instance as a web test resource.</returns>
-        Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource);
+        ///// <summary>
+        ///// Creates or updates web test resource.
+        ///// </summary>
+        ///// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
+        ///// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
+        ///// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
+        ///// <returns>Returns the <see cref="GenericResourceExtended"/> instance as a web test resource.</returns>
+        //Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource);
 
-        /// <summary>
-        /// Creates or updates alert resource.
-        /// </summary>
-        /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
-        /// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
-        /// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
-        /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
-        /// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
-        Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource);
+        ///// <summary>
+        ///// Creates or updates alert resource.
+        ///// </summary>
+        ///// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
+        ///// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
+        ///// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
+        ///// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
+        ///// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
+        //Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource);
     }
 }
