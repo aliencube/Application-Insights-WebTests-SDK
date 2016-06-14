@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 
+using Aliencube.AdalWrapper;
 using Aliencube.Azure.Insights.WebTests.Models;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
@@ -26,6 +27,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         private readonly AuthenticationElement _auth;
         private readonly ApplicationInsightsElement _appInsights;
         private readonly List<WebTestElement> _webTests;
+        private readonly IAuthenticationContextWrapper _authenticationContext;
 
         private IResourceManagementClient _resourceManagementClient;
         private IInsightsManagementClient _insightsManagementClient;
@@ -35,16 +37,24 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// Initialises a new instance of the <see cref="WebTestService"/> class.
         /// </summary>
         /// <param name="settings"><see cref="IWebTestSettingsElement"/> instance.</param>
-        public WebTestService(IWebTestSettingsElement settings)
+        /// <param name="authenticationContext"><see cref="IAuthenticationContextWrapper"/> instance.</param>
+        public WebTestService(IWebTestSettingsElement settings, IAuthenticationContextWrapper authenticationContext)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            this._auth = settings.Authentication;
-            this._appInsights = settings.ApplicationInsight;
-            this._webTests = settings.WebTests.OfType<WebTestElement>().ToList();
+            this._auth = settings.Authentication.Clone();
+            this._appInsights = settings.ApplicationInsight.Clone();
+            this._webTests = settings.WebTests.Clone().OfType<WebTestElement>().ToList();
+
+            if (authenticationContext == null)
+            {
+                throw new ArgumentNullException(nameof(authenticationContext));
+            }
+
+            this._authenticationContext = authenticationContext;
         }
 
         /// <summary>
@@ -76,20 +86,17 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns the <see cref="SubscriptionCloudCredentials"/> instance as Azure subscription credentials.</returns>
         public async Task<SubscriptionCloudCredentials> GetCredentialsAsync()
         {
-            var authenticationContext = new AuthenticationContext($"{this._auth.AadInstanceUrl.TrimEnd('/')}/{this._auth.TenantName.TrimEnd('/')}.onmicrosoft.com", false);
-            AuthenticationResult result;
+            IAuthenticationResultWrapper result;
             if (this._auth.UseServicePrinciple)
             {
                 var cc = new ClientCredential(this._auth.ClientId, this._auth.ClientSecret);
-                result = await authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", cc).ConfigureAwait(false);
+                result = await this._authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", cc).ConfigureAwait(false);
+
+                return new TokenCloudCredentials(this._appInsights.SubscriptionId, result.AccessToken);
             }
-            else
-            {
-                var username = "[USERNAME]";
-                var password = "[PASSWORD]";
-                var uc = new UserPasswordCredential(username, password);
-                result = await authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", this._auth.ClientId, uc).ConfigureAwait(false);
-            }
+
+            var uc = new UserPasswordCredential(this._auth.Username, this._auth.Password);
+            result = await this._authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", this._auth.ClientId, uc).ConfigureAwait(false);
 
             return new TokenCloudCredentials(this._appInsights.SubscriptionId, result.AccessToken);
         }

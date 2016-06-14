@@ -23,6 +23,8 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
             this.ClientId = element.ClientId;
             this.ClientSecret = element.ClientSecret;
             this.UseServicePrinciple = element.UseServicePrinciple;
+            this.Username = element.Username;
+            this.Password = element.Password;
             this.TenantName = element.TenantName;
             this.AadInstanceUrl = element.AadInstanceUrl;
             this.ManagementInstanceUrl = element.ManagementInstanceUrl;
@@ -56,6 +58,26 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         {
             get { return (bool)this["useServicePrinciple"]; }
             set { this["useServicePrinciple"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        [ConfigurationProperty("username", IsRequired = false)]
+        public string Username
+        {
+            get { return (string)this["username"]; }
+            set { this["username"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        [ConfigurationProperty("password", IsRequired = false)]
+        public string Password
+        {
+            get { return (string)this["password"]; }
+            set { this["password"] = value; }
         }
 
         /// <summary>

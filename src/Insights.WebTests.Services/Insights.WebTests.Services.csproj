@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliencube.AdalWrapper, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Aliencube.AdalWrapper.1.0.0.5\lib\net45\Aliencube.AdalWrapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Aliencube.CaseInsensitiveEnumConverter, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Aliencube.CaseInsensitiveEnumConverter.1.0.0.2\lib\net45\Aliencube.CaseInsensitiveEnumConverter.dll</HintPath>
       <Private>True</Private>
