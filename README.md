@@ -1,6 +1,20 @@
 # Application Insights WebTests SDK #
 
-This provides an extended SDK for WebTests of Application Insights.
+[![Build status](https://ci.appveyor.com/api/projects/status/yjlaqjvc9w44aa27/branch/dev?svg=true)](https://ci.appveyor.com/project/justinyoo/application-insights-webtests-sdk/branch/dev)
+
+This provides an extended SDK for WebTests of Application Insights which is not supported by [Azure SDK for .NET](https://github.com/Azure/azure-sdk-for-net).
+
+
+## Getting Started ##
+
+### Using `ClientCredential` ###
+
+TBD
+
+
+### Using `UserCredential` ###
+
+TBD
 
 
 ## Contribution ##
@@ -10,7 +24,7 @@ Your contributions are always welcome! All your work should be done in your fork
 
 ## License ##
 
-**Microsoft ADAL Wrapper** is released under [MIT License](http://opensource.org/licenses/MIT)
+**Application Insights WebTests SDK** is released under [MIT License](http://opensource.org/licenses/MIT)
 
 > The MIT License (MIT)
 >
