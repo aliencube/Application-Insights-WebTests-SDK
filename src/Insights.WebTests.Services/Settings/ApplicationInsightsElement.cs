@@ -5,7 +5,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
     /// <summary>
     /// This represents the configuration element entity for Application Insights details.
     /// </summary>
-    public sealed class ApplicationInsightsElement : BaseConfigElement<ApplicationInsightsElement>
+    public class ApplicationInsightsElement : BaseConfigElement<ApplicationInsightsElement>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationInsightsElement"/> class.
@@ -29,7 +29,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the name of the Application Insights resource.
         /// </summary>
         [ConfigurationProperty("name", IsRequired = true)]
-        public string Name
+        public virtual string Name
         {
             get { return (string)this["name"]; }
             set { this["name"] = value; }
@@ -39,7 +39,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the resource group.
         /// </summary>
         [ConfigurationProperty("resourceGroup", IsRequired = true)]
-        public string ResourceGroup
+        public virtual string ResourceGroup
         {
             get { return (string)this["resourceGroup"]; }
             set { this["resourceGroup"] = value; }
@@ -49,7 +49,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the subscription Id.
         /// </summary>
         [ConfigurationProperty("subscriptionId", IsRequired = true)]
-        public string SubscriptionId
+        public virtual string SubscriptionId
         {
             get { return (string)this["subscriptionId"]; }
             set { this["subscriptionId"] = value; }

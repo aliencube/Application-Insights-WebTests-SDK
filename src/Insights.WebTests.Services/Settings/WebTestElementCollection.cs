@@ -6,7 +6,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
     /// <summary>
     /// Gets or sets the configuration element collection entity for web tests.
     /// </summary>
-    public sealed class WebTestElementCollection : ConfigurationElementCollection
+    public class WebTestElementCollection : ConfigurationElementCollection
     {
         /// <summary>
         /// Gets the type of the <see cref="ConfigurationElementCollectionType"/> instance.

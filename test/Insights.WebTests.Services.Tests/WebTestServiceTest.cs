@@ -20,13 +20,14 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
     /// </summary>
     public class WebTestServiceTest : IClassFixture<WebTestServiceFixture>
     {
-        private readonly AuthenticationElement _auth;
-        private readonly ApplicationInsightsElement _appInsights;
+        private readonly Mock<AuthenticationElement> _auth;
+        private readonly Mock<ApplicationInsightsElement> _appInsights;
         private readonly WebTestElementCollection _webtests;
         private readonly Mock<IWebTestSettingsElement> _settings;
         private readonly Mock<IAuthenticationResultWrapper> _authResult;
         private readonly Mock<IAuthenticationContextWrapper> _authContext;
-        private readonly IWebTestService _service;
+
+        private IWebTestService _service;
 
         /// <summary>
         /// Initialises a new instance of the <see cref="WebTestServiceTest"/> class.
@@ -73,14 +74,25 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         [InlineData("ACCESS_TOKEN")]
         public async void Given_ClientCredential_GetCredentialsAsync_ShouldReturn_Result(string accessToken)
         {
-            this._auth.ClientSecret = "CLIENT_SECRET";
-            this._auth.UseServicePrinciple = true;
+            this._auth.SetupGet(p => p.ClientId).Returns("CLIENT_ID");
+            this._auth.SetupGet(p => p.ClientSecret).Returns("CLIENT_SECRET");
+            this._auth.SetupGet(p => p.UseServicePrinciple).Returns(true);
+            this._auth.SetupGet(p => p.AadInstanceUrl).Returns("https://login.microsoftonline.com/");
+            this._auth.SetupGet(p => p.ManagementInstanceUrl).Returns("https://management.core.windows.net/");
+
+            this._appInsights.SetupGet(p => p.SubscriptionId).Returns("SUBSCRIPTION_ID");
+
+            this._settings.SetupGet(p => p.Authentication).Returns(this._auth.Object);
+            this._settings.SetupGet(p => p.ApplicationInsight).Returns(this._appInsights.Object);
+
             this._authResult.SetupGet(p => p.AccessToken).Returns(accessToken);
             this._authContext.Setup(p => p.AcquireTokenAsync(It.IsAny<string>(), It.IsAny<ClientCredential>())).ReturnsAsync(this._authResult.Object);
 
+            this._service = new WebTestService(this._settings.Object, this._authContext.Object);
+
             var result = (await this._service.GetCredentialsAsync().ConfigureAwait(false)) as TokenCloudCredentials;
             result.Should().NotBeNull();
-            result.SubscriptionId.Should().BeEquivalentTo(this._appInsights.SubscriptionId);
+            result.SubscriptionId.Should().BeEquivalentTo(this._appInsights.Object.SubscriptionId);
             result.Token.Should().BeEquivalentTo(accessToken);
         }
 
@@ -91,15 +103,26 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         [InlineData("ACCESS_TOKEN")]
         public async void Given_UserCredential_GetCredentialsAsync_ShouldReturn_Result(string accessToken)
         {
-            this._auth.Username = "USERNAME";
-            this._auth.Password = "PASSWORD";
-            this._auth.UseServicePrinciple = false;
+            this._auth.SetupGet(p => p.ClientId).Returns("CLIENT_ID");
+            this._auth.SetupGet(p => p.UseServicePrinciple).Returns(false);
+            this._auth.SetupGet(p => p.Username).Returns("USERNAME");
+            this._auth.SetupGet(p => p.Password).Returns("PASSWORD");
+            this._auth.SetupGet(p => p.AadInstanceUrl).Returns("https://login.microsoftonline.com/");
+            this._auth.SetupGet(p => p.ManagementInstanceUrl).Returns("https://management.core.windows.net/");
+
+            this._appInsights.SetupGet(p => p.SubscriptionId).Returns("SUBSCRIPTION_ID");
+
+            this._settings.SetupGet(p => p.Authentication).Returns(this._auth.Object);
+            this._settings.SetupGet(p => p.ApplicationInsight).Returns(this._appInsights.Object);
+
             this._authResult.SetupGet(p => p.AccessToken).Returns(accessToken);
             this._authContext.Setup(p => p.AcquireTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UserCredential>())).ReturnsAsync(this._authResult.Object);
 
+            this._service = new WebTestService(this._settings.Object, this._authContext.Object);
+
             var result = (await this._service.GetCredentialsAsync().ConfigureAwait(false)) as TokenCloudCredentials;
             result.Should().NotBeNull();
-            result.SubscriptionId.Should().BeEquivalentTo(this._appInsights.SubscriptionId);
+            result.SubscriptionId.Should().BeEquivalentTo(this._appInsights.Object.SubscriptionId);
             result.Token.Should().BeEquivalentTo(accessToken);
         }
     }

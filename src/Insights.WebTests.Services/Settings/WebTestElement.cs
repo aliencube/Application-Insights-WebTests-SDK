@@ -12,7 +12,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
     /// <summary>
     /// This represents the configuration element entity for web test.
     /// </summary>
-    public sealed class WebTestElement : BaseConfigElement<WebTestElement>
+    public class WebTestElement : BaseConfigElement<WebTestElement>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="WebTestElement"/> class.
@@ -41,7 +41,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// </summary>
         [ConfigurationProperty("testType", IsRequired = true, DefaultValue = TestType.UrlPingTest)]
         [TypeConverter(typeof(CaseInsensitiveEnumConverter<TestType>))]
-        public TestType TestType
+        public virtual TestType TestType
         {
             get { return (TestType)this["testType"]; }
             set { this["testType"] = value; }
@@ -51,7 +51,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the value indicating whether to parse dependent requrests or not.
         /// </summary>
         [ConfigurationProperty("parseDependentRequests", IsRequired = true, DefaultValue = true)]
-        public bool ParseDependentRequests
+        public virtual bool ParseDependentRequests
         {
             get { return (bool)this["parseDependentRequests"]; }
             set { this["parseDependentRequests"] = value; }
@@ -62,7 +62,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// </summary>
         [ConfigurationProperty("retriesForWebTestFailure", IsRequired = true, DefaultValue = RetriesForWebTestFailure.Enable)]
         [TypeConverter(typeof(CaseInsensitiveEnumConverter<RetriesForWebTestFailure>))]
-        public RetriesForWebTestFailure RetriesForWebTestFailure
+        public virtual RetriesForWebTestFailure RetriesForWebTestFailure
         {
             get { return (RetriesForWebTestFailure)this["retriesForWebTestFailure"]; }
             set { this["retriesForWebTestFailure"] = value; }
@@ -72,7 +72,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the test frequency in minutes.
         /// </summary>
         [ConfigurationProperty("testFrequency", IsRequired = true, DefaultValue = 5)]
-        public int WebTestFrequency
+        public virtual int WebTestFrequency
         {
             private get { return (int)this["testFrequency"]; }
             set { this["testFrequency"] = value; }
@@ -81,7 +81,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <summary>
         /// Gets the test frequency in minutes converted from Web/App.config.
         /// </summary>
-        public TestFrequency TestFrequency
+        public virtual TestFrequency TestFrequency
         {
             get
             {
@@ -99,7 +99,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// </summary>
         [ConfigurationProperty("testLocations", IsRequired = true)]
         [TypeConverter(typeof(CommaDelimitedListConverter<TestLocations>))]
-        public List<TestLocations> TestLocations
+        public virtual List<TestLocations> TestLocations
         {
             get { return (List<TestLocations>)this["testLocations"]; }
             set { this["testLocations"] = value; }
@@ -109,7 +109,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the success criteria.
         /// </summary>
         [ConfigurationProperty("successCriteria", IsRequired = true)]
-        public SucessCriteriaElement SuccessCriteria
+        public virtual SucessCriteriaElement SuccessCriteria
         {
             get { return (SucessCriteriaElement)this["successCriteria"]; }
             set { this["successCriteria"] = value; }
@@ -119,7 +119,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the success criteria.
         /// </summary>
         [ConfigurationProperty("alerts", IsRequired = true)]
-        public AlertsElement Alerts
+        public virtual AlertsElement Alerts
         {
             get { return (AlertsElement)this["alerts"]; }
             set { this["alerts"] = value; }

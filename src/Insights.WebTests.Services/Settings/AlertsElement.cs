@@ -12,7 +12,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
     /// <summary>
     /// This represents the configuration element for the alerts.
     /// </summary>
-    public sealed class AlertsElement : BaseConfigElement<AlertsElement>
+    public class AlertsElement : BaseConfigElement<AlertsElement>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AlertsElement"/> class.
@@ -40,7 +40,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// </summary>
         [ConfigurationProperty("statusEnabled", IsRequired = true, DefaultValue = TestStatus.Enabled)]
         [TypeConverter(typeof(CaseInsensitiveEnumConverter<TestStatus>))]
-        public TestStatus TestStatus
+        public virtual TestStatus TestStatus
         {
             get { return (TestStatus)this["statusEnabled"]; }
             set { this["statusEnabled"] = value; }
@@ -49,13 +49,13 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <summary>
         /// Gets the value indicating whether the the alert status is enabled or not.
         /// </summary>
-        public bool IsEnabled => this.TestStatus == TestStatus.Enabled;
+        public virtual bool IsEnabled => this.TestStatus == TestStatus.Enabled;
 
         /// <summary>
         /// Gets or sets the thershold value for alter locations.
         /// </summary>
         [ConfigurationProperty("alertLocationThreshold", IsRequired = true, DefaultValue = 1)]
-        public int AlertLocationThreshold
+        public virtual int AlertLocationThreshold
         {
             get { return (int)this["alertLocationThreshold"]; }
             set { this["alertLocationThreshold"] = value; }
@@ -65,13 +65,13 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the time period value in minute, when the failure keeps happening longer than the value specified.
         /// </summary>
         [ConfigurationProperty("alertFailureTimeWindow", IsRequired = true, DefaultValue = 5)]
-        public int WebTestAlertFailureTimeWindow
+        public virtual int WebTestAlertFailureTimeWindow
         {
             private get { return (int)this["alertFailureTimeWindow"]; }
             set { this["alertFailureTimeWindow"] = value; }
         }
 
-        public TestAlertFailureTimeWindow TestAlertFailureTimeWindow
+        public virtual TestAlertFailureTimeWindow TestAlertFailureTimeWindow
         {
             get
             {
@@ -88,7 +88,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the value indicating whether to sent alert emails to admin or not.
         /// </summary>
         [ConfigurationProperty("sendAlertToAdmin", IsRequired = true, DefaultValue = true)]
-        public bool SendAlertToAdmin
+        public virtual bool SendAlertToAdmin
         {
             get { return (bool)this["sendAlertToAdmin"]; }
             set { this["sendAlertToAdmin"] = value; }
@@ -99,7 +99,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// </summary>
         [ConfigurationProperty("recipients", IsRequired = true)]
         [TypeConverter(typeof(CommaDelimitedListConverter<string>))]
-        public List<string> Recipients
+        public virtual List<string> Recipients
         {
             get { return (List<string>)this["recipients"]; }
             set { this["recipients"] = value; }
@@ -109,7 +109,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the webhook URL.
         /// </summary>
         [ConfigurationProperty("webhookUrl", IsRequired = false)]
-        public string WebhookUrl
+        public virtual string WebhookUrl
         {
             get { return (string)this["webhookUrl"]; }
             set { this["webhookUrl"] = value; }

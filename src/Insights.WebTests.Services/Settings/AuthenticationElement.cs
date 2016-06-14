@@ -5,7 +5,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
     /// <summary>
     /// This represents the configuration element entity for authentication.
     /// </summary>
-    public sealed class AuthenticationElement : BaseConfigElement<AuthenticationElement>
+    public class AuthenticationElement : BaseConfigElement<AuthenticationElement>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AuthenticationElement"/> class.
@@ -34,7 +34,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the client Id.
         /// </summary>
         [ConfigurationProperty("clientId", IsRequired = true)]
-        public string ClientId
+        public virtual string ClientId
         {
             get { return (string)this["clientId"]; }
             set { this["clientId"] = value; } 
@@ -44,7 +44,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the client secret.
         /// </summary>
         [ConfigurationProperty("clientSecret", IsRequired = false)]
-        public string ClientSecret
+        public virtual string ClientSecret
         {
             get { return (string)this["clientSecret"]; }
             set { this["clientSecret"] = value; }
@@ -54,7 +54,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the value indicating whether to use service principle or not.
         /// </summary>
         [ConfigurationProperty("useServicePrinciple", IsRequired = true, DefaultValue = false)]
-        public bool UseServicePrinciple
+        public virtual bool UseServicePrinciple
         {
             get { return (bool)this["useServicePrinciple"]; }
             set { this["useServicePrinciple"] = value; }
@@ -64,7 +64,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the username.
         /// </summary>
         [ConfigurationProperty("username", IsRequired = false)]
-        public string Username
+        public virtual string Username
         {
             get { return (string)this["username"]; }
             set { this["username"] = value; }
@@ -74,7 +74,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the password.
         /// </summary>
         [ConfigurationProperty("password", IsRequired = false)]
-        public string Password
+        public virtual string Password
         {
             get { return (string)this["password"]; }
             set { this["password"] = value; }
@@ -84,7 +84,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the tenant name.
         /// </summary>
         [ConfigurationProperty("tenantName", IsRequired = true)]
-        public string TenantName
+        public virtual string TenantName
         {
             get { return (string)this["tenantName"]; }
             set { this["tenantName"] = value; }
@@ -94,7 +94,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the Azure AD instance URL.
         /// </summary>
         [ConfigurationProperty("aadInstance", IsRequired = true)]
-        public string AadInstanceUrl
+        public virtual string AadInstanceUrl
         {
             get { return (string)this["aadInstance"]; }
             set { this["aadInstance"] = value; }
@@ -104,7 +104,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the Azure management instance URL.
         /// </summary>
         [ConfigurationProperty("managementInstance", IsRequired = true)]
-        public string ManagementInstanceUrl
+        public virtual string ManagementInstanceUrl
         {
             get { return (string)this["managementInstance"]; }
             set { this["managementInstance"] = value; }

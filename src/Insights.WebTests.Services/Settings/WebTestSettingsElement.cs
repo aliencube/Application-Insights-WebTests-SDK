@@ -5,7 +5,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
     /// <summary>
     /// This represents the configuration entity for azure web tests.
     /// </summary>
-    public sealed class WebTestSettingsElement : ConfigurationSection, IWebTestSettingsElement
+    public class WebTestSettingsElement : ConfigurationSection, IWebTestSettingsElement
     {
         private bool _disposed;
 
@@ -13,7 +13,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the <see cref="AuthenticationElement"/> instance.
         /// </summary>
         [ConfigurationProperty("authentication", IsRequired = true)]
-        public AuthenticationElement Authentication
+        public virtual AuthenticationElement Authentication
         {
             get { return (AuthenticationElement)this["authentication"]; }
             set { this["authentication"] = value; }
@@ -23,7 +23,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the <see cref="ApplicationInsightsElement"/> instance.
         /// </summary>
         [ConfigurationProperty("applicationInsights", IsRequired = true)]
-        public ApplicationInsightsElement ApplicationInsight
+        public virtual ApplicationInsightsElement ApplicationInsight
         {
             get { return (ApplicationInsightsElement)this["applicationInsights"]; }
             set { this["applicationInsights"] = value; }
@@ -33,7 +33,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the <see cref="WebTestElementCollection"/> instance.
         /// </summary>
         [ConfigurationProperty("webTests", IsRequired = true)]
-        public WebTestElementCollection WebTests
+        public virtual WebTestElementCollection WebTests
         {
             get { return (WebTestElementCollection)this["webTests"]; }
             set { this["webTests"] = value; }

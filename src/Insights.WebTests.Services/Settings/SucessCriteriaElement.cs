@@ -9,7 +9,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
     /// <summary>
     /// This represents the configuration element for the success criteria.
     /// </summary>
-    public sealed class SucessCriteriaElement : BaseConfigElement<SucessCriteriaElement>
+    public class SucessCriteriaElement : BaseConfigElement<SucessCriteriaElement>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="SucessCriteriaElement"/> class.
@@ -35,13 +35,13 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the test timeout in secondes.
         /// </summary>
         [ConfigurationProperty("testTimeout", IsRequired = true, DefaultValue = 120)]
-        public int WebTestTimeout
+        public virtual int WebTestTimeout
         {
             private get { return (int)this["testTimeout"]; }
             set { this["testTimeout"] = value; }
         }
 
-        public TestTimeout TestTimeout
+        public virtual TestTimeout TestTimeout
         {
             get
             {
@@ -58,7 +58,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the value indicating whether to require HTTP response or not.
         /// </summary>
         [ConfigurationProperty("requireHttpResponse", IsRequired = true, DefaultValue = true)]
-        public bool RequireHttpResponse
+        public virtual bool RequireHttpResponse
         {
             get { return (bool)this["requireHttpResponse"]; }
             set { this["requireHttpResponse"] = value; }
@@ -68,7 +68,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the status code expected.
         /// </summary>
         [ConfigurationProperty("statusCodeMustEqual", IsRequired = true, DefaultValue = 200)]
-        public int StatusCodeMustEqualTo
+        public virtual int StatusCodeMustEqualTo
         {
             get { return (int)this["statusCodeMustEqual"]; }
             set { this["statusCodeMustEqual"] = value; }
@@ -78,7 +78,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the value indicating whether to require response body content to match.
         /// </summary>
         [ConfigurationProperty("requireContentMatch", IsRequired = true, DefaultValue = false)]
-        public bool RequireContentMatch
+        public virtual bool RequireContentMatch
         {
             get { return (bool)this["requireContentMatch"]; }
             set { this["requireContentMatch"] = value; }
@@ -88,7 +88,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the content to match.
         /// </summary>
         [ConfigurationProperty("contentMustContain", IsRequired = false)]
-        public string ContentMustContain
+        public virtual string ContentMustContain
         {
             get { return (string)this["contentMustContain"]; }
             set { this["contentMustContain"] = value; }

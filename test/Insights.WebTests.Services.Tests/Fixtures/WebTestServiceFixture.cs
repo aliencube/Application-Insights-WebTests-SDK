@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Aliencube.AdalWrapper;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
@@ -20,28 +21,15 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
         /// </summary>
         public WebTestServiceFixture()
         {
-            this.AuthenticationElement = new AuthenticationElement()
-                                             {
-                                                 ClientId = "CLIENT_ID",
-                                                 TenantName = "TENANT_NAME",
-                                                 AadInstanceUrl = "https://login.microsoftonline.com/",
-                                                 ManagementInstanceUrl = "https://management.core.windows.net/",
-                                             };
+            this.AuthenticationElement = new Mock<AuthenticationElement>();
 
-            this.ApplicationInsightsElement = new ApplicationInsightsElement()
-                                                  {
-                                                      SubscriptionId = "SUBSCRIPTION_ID"
-                                                  };
+            this.ApplicationInsightsElement = new Mock<ApplicationInsightsElement>();
 
-            this.WebTestElementCollection = new WebTestElementCollection
-                                                {
-                                                    new WebTestElement() { TestType = TestType.UrlPingTest },
-                                                    new WebTestElement() { TestType = TestType.MultiStepTest },
-                                                };
+            this.WebTestElementCollection = new WebTestElementCollection();
 
             this.WebTestSettingsElement = new Mock<IWebTestSettingsElement>();
-            this.WebTestSettingsElement.SetupGet(p => p.Authentication).Returns(this.AuthenticationElement);
-            this.WebTestSettingsElement.SetupGet(p => p.ApplicationInsight).Returns(this.ApplicationInsightsElement);
+            this.WebTestSettingsElement.SetupGet(p => p.Authentication).Returns(this.AuthenticationElement.Object);
+            this.WebTestSettingsElement.SetupGet(p => p.ApplicationInsight).Returns(this.ApplicationInsightsElement.Object);
             this.WebTestSettingsElement.SetupGet(p => p.WebTests).Returns(this.WebTestElementCollection);
 
             this.AuthenticationResult = new Mock<IAuthenticationResultWrapper>();
@@ -52,17 +40,17 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
         }
 
         /// <summary>
-        /// Gets the <see cref="AuthenticationElement"/> instance.
+        /// Gets the <see cref="Mock{AuthenticationElement}"/> instance.
         /// </summary>
-        public AuthenticationElement AuthenticationElement { get; }
+        public Mock<AuthenticationElement> AuthenticationElement { get; }
 
         /// <summary>
-        /// Gets the <see cref="ApplicationInsightsElement"/> instance.
+        /// Gets the <see cref="Mock{ApplicationInsightsElement}"/> instance.
         /// </summary>
-        public ApplicationInsightsElement ApplicationInsightsElement { get; }
+        public Mock<ApplicationInsightsElement> ApplicationInsightsElement { get; }
 
         /// <summary>
-        /// Gets the <see cref="WebTestElementCollection"/> instance.
+        /// Gets the <see cref="Mock{WebTestElementCollection}"/> instance.
         /// </summary>
         public WebTestElementCollection WebTestElementCollection { get; }
 
