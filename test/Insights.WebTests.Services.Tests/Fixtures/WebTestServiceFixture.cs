@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Aliencube.AdalWrapper;
+using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
 
 using Castle.Core.Resource;
@@ -27,6 +28,8 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
             this.AuthenticationElement = new Mock<AuthenticationElement>();
 
             this.ApplicationInsightsElement = new Mock<ApplicationInsightsElement>();
+
+            this.WebTestElement = new Mock<WebTestElement>();
 
             this.WebTestElementCollection = new WebTestElementCollection();
 
@@ -57,6 +60,11 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
         /// Gets the <see cref="Mock{ApplicationInsightsElement}"/> instance.
         /// </summary>
         public Mock<ApplicationInsightsElement> ApplicationInsightsElement { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{WebTestElement}"/> instance.
+        /// </summary>
+        public Mock<WebTestElement> WebTestElement { get; }
 
         /// <summary>
         /// Gets the <see cref="Mock{WebTestElementCollection}"/> instance.

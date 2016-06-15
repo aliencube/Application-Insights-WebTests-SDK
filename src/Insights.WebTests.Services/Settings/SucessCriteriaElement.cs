@@ -24,7 +24,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <param name="element"><see cref="SucessCriteriaElement"/> instance.</param>
         public SucessCriteriaElement(SucessCriteriaElement element)
         {
-            this.WebTestTimeout = (int)element.TestTimeout;
+            this.WebTestTimeout = (int)element.Timeout;
             this.RequireHttpResponse = element.RequireHttpResponse;
             this.StatusCodeMustEqualTo = element.StatusCodeMustEqualTo;
             this.RequireContentMatch = element.RequireContentMatch;
@@ -32,16 +32,19 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         }
 
         /// <summary>
-        /// Gets or sets the test timeout in secondes.
+        /// Sets the test timeout in secondes.
         /// </summary>
-        [ConfigurationProperty("testTimeout", IsRequired = true, DefaultValue = 120)]
+        [ConfigurationProperty("timeout", IsRequired = true, DefaultValue = 120)]
         public virtual int WebTestTimeout
         {
-            private get { return (int)this["testTimeout"]; }
-            set { this["testTimeout"] = value; }
+            private get { return (int)this["timeout"]; }
+            set { this["timeout"] = value; }
         }
 
-        public virtual TestTimeout TestTimeout
+        /// <summary>
+        /// Gets the test timeout in seconds.
+        /// </summary>
+        public virtual TestTimeout Timeout
         {
             get
             {

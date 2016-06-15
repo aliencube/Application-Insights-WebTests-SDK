@@ -27,7 +27,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <param name="element"><see cref="AlertsElement"/> instance.</param>
         public AlertsElement(AlertsElement element)
         {
-            this.TestStatus = element.TestStatus;
+            this.Status = element.Status;
             this.AlertLocationThreshold = element.AlertLocationThreshold;
             this.WebTestAlertFailureTimeWindow = (int)element.TestAlertFailureTimeWindow;
             this.SendAlertToAdmin = element.SendAlertToAdmin;
@@ -38,18 +38,18 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// <summary>
         /// Gets or sets the value indicating whether the the alert status is enabled or not.
         /// </summary>
-        [ConfigurationProperty("statusEnabled", IsRequired = true, DefaultValue = TestStatus.Enabled)]
+        [ConfigurationProperty("status", IsRequired = true, DefaultValue = TestStatus.Enabled)]
         [TypeConverter(typeof(CaseInsensitiveEnumConverter<TestStatus>))]
-        public virtual TestStatus TestStatus
+        public virtual TestStatus Status
         {
-            get { return (TestStatus)this["statusEnabled"]; }
-            set { this["statusEnabled"] = value; }
+            get { return (TestStatus)this["status"]; }
+            set { this["status"] = value; }
         }
 
         /// <summary>
         /// Gets the value indicating whether the the alert status is enabled or not.
         /// </summary>
-        public virtual bool IsEnabled => this.TestStatus == TestStatus.Enabled;
+        public virtual bool IsEnabled => this.Status == TestStatus.Enabled;
 
         /// <summary>
         /// Gets or sets the thershold value for alter locations.
@@ -62,7 +62,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         }
 
         /// <summary>
-        /// Gets or sets the time period value in minute, when the failure keeps happening longer than the value specified.
+        /// Sets the time period value in minute, when the failure keeps happening longer than the value specified.
         /// </summary>
         [ConfigurationProperty("alertFailureTimeWindow", IsRequired = true, DefaultValue = 5)]
         public virtual int WebTestAlertFailureTimeWindow
@@ -71,6 +71,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
             set { this["alertFailureTimeWindow"] = value; }
         }
 
+        /// <summary>
+        /// Gets the time period value in minute, when the failure keeps happening longer than the value specified.
+        /// </summary>
         public virtual TestAlertFailureTimeWindow TestAlertFailureTimeWindow
         {
             get

@@ -34,14 +34,16 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.</returns>
         Task<GenericResourceExtended> GetInsightsResourceAsync(IResourceManagementClient client);
 
-        ///// <summary>
-        ///// Creates or updates web test resource.
-        ///// </summary>
-        ///// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
-        ///// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
-        ///// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
-        ///// <returns>Returns the <see cref="GenericResourceExtended"/> instance as a web test resource.</returns>
-        //Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource);
+        /// <summary>
+        /// Creates or updates web test resource.
+        /// </summary>
+        /// <param name="name">Name of the web test.</param>
+        /// <param name="url">URL of the web test.</param>
+        /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
+        /// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
+        /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
+        /// <returns>Returns the <see cref="GenericResourceExtended"/> instance as a web test resource.</returns>
+        Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(string name, string url, WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource);
 
         ///// <summary>
         ///// Creates or updates alert resource.

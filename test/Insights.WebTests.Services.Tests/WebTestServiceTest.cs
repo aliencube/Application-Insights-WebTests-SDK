@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 
 using Aliencube.AdalWrapper;
+using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
 using Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures;
 
@@ -19,6 +21,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Moq;
 
 using Xunit;
+using Xunit.Sdk;
 
 namespace Aliencube.Azure.Insights.WebTests.Services.Tests
 {
@@ -29,6 +32,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
     {
         private readonly Mock<AuthenticationElement> _auth;
         private readonly Mock<ApplicationInsightsElement> _appInsights;
+        private readonly Mock<WebTestElement> _webTest;
         private readonly WebTestElementCollection _webtests;
         private readonly Mock<IWebTestSettingsElement> _settings;
         private readonly Mock<IAuthenticationResultWrapper> _authResult;
@@ -47,6 +51,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         {
             this._auth = fixture.AuthenticationElement;
             this._appInsights = fixture.ApplicationInsightsElement;
+            this._webTest = fixture.WebTestElement;
             this._webtests = fixture.WebTestElementCollection;
             this._settings = fixture.WebTestSettingsElement;
             this._authResult = fixture.AuthenticationResult;
@@ -183,6 +188,103 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             this._resourceClient.SetupGet(p => p.Resources).Returns(this._resourceOperations.Object);
 
             var result = await this._service.GetInsightsResourceAsync(this._resourceClient.Object).ConfigureAwait(false);
+            result.Location.Should().BeEquivalentTo(location);
+        }
+
+        [Theory]
+        [InlineData("WEBTEST_NAME", "http://localhost", TestType.UrlPingTest, "Central US")]
+        public void Given_NullParameters_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestType testType, string location)
+        {
+            this._webTest.SetupGet(p => p.TestType).Returns(testType);
+
+            var insightsResource = new ResourceBaseExtended(location);
+
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(null, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, null, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, null, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, null, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, null).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Theory]
+        [InlineData("WEBTEST_NAME", "http://localhost", TestType.MultiStepTest)]
+        public void Given_InvalidTestType_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestType testType)
+        {
+            this._webTest.SetupGet(p => p.TestType).Returns(testType);
+
+            var insightsResource = new ResourceBaseExtended();
+
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<InvalidOperationException>();
+        }
+
+        [Theory]
+        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, "RESOURCE_GROUP", HttpStatusCode.BadRequest)]
+        public void Given_InvalidHttpStatusCode_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, string resourceGroup, HttpStatusCode statusCode)
+        {
+            var successCriteria = new Mock<SucessCriteriaElement>();
+            successCriteria.SetupGet(p => p.Timeout).Returns(testTimeout);
+
+            this._webTest.SetupGet(p => p.TestType).Returns(TestType.UrlPingTest);
+            this._webTest.SetupGet(p => p.Status).Returns(testStatus);
+            this._webTest.SetupGet(p => p.Frequency).Returns(testFrequency);
+            this._webTest.SetupGet(p => p.ParseDependentRequests).Returns(parseDependentRequests);
+            this._webTest.SetupGet(p => p.SuccessCriteria).Returns(successCriteria.Object);
+            this._webTest.SetupGet(p => p.RetriesForWebTestFailure).Returns(retriesForWebTestFailure);
+
+            this._appInsights.SetupGet(p => p.ResourceGroup).Returns(resourceGroup);
+
+            this._settings.SetupGet(p => p.ApplicationInsight).Returns(this._appInsights.Object);
+
+            var resourceResult = new ResourceCreateOrUpdateResult() { StatusCode = statusCode };
+            this._resourceOperations.Setup(p => p.CreateOrUpdateAsync(It.IsAny<string>(), It.IsAny<ResourceIdentity>(), It.IsAny<GenericResource>(), It.IsAny<CancellationToken>())).ReturnsAsync(resourceResult);
+
+            this._resourceClient.Setup(p => p.Resources).Returns(this._resourceOperations.Object);
+
+            var id = Guid.NewGuid();
+            var insightsResource = new ResourceBaseExtended() { Id = id.ToString(), Name = name };
+
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<HttpResponseException>().And.Response.StatusCode.Should().Be(statusCode);
+        }
+
+        [Theory]
+        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, "RESOURCE_GROUP", "Central US")]
+        public async void Given_Parameters_CreateOrUpdateWebTestAsync_ShouldReturn_Result(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, string resourceGroup, string location)
+        {
+            var successCriteria = new Mock<SucessCriteriaElement>();
+            successCriteria.SetupGet(p => p.Timeout).Returns(testTimeout);
+
+            this._webTest.SetupGet(p => p.TestType).Returns(TestType.UrlPingTest);
+            this._webTest.SetupGet(p => p.Status).Returns(testStatus);
+            this._webTest.SetupGet(p => p.Frequency).Returns(testFrequency);
+            this._webTest.SetupGet(p => p.ParseDependentRequests).Returns(parseDependentRequests);
+            this._webTest.SetupGet(p => p.SuccessCriteria).Returns(successCriteria.Object);
+            this._webTest.SetupGet(p => p.RetriesForWebTestFailure).Returns(retriesForWebTestFailure);
+
+            this._appInsights.SetupGet(p => p.ResourceGroup).Returns(resourceGroup);
+
+            this._settings.SetupGet(p => p.ApplicationInsight).Returns(this._appInsights.Object);
+
+            var resource = new GenericResourceExtended(location);
+            var resourceResult = new ResourceCreateOrUpdateResult() { StatusCode = HttpStatusCode.OK, Resource = resource };
+            this._resourceOperations.Setup(p => p.CreateOrUpdateAsync(It.IsAny<string>(), It.IsAny<ResourceIdentity>(), It.IsAny<GenericResource>(), It.IsAny<CancellationToken>())).ReturnsAsync(resourceResult);
+
+            this._resourceClient.Setup(p => p.Resources).Returns(this._resourceOperations.Object);
+
+            var id = Guid.NewGuid();
+            var insightsResource = new ResourceBaseExtended(location) { Id = id.ToString(), Name = name };
+
+            var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false);
             result.Location.Should().BeEquivalentTo(location);
         }
     }

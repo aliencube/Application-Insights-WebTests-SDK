@@ -169,7 +169,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services
             }
 
             var resource = new WebTestResource(name, url, insightsResource, webTest.TestType);
-            resource.CreateWebTestProperties(TestLocations.AuSydney, webTest.Status, webTest.Frequency, webTest.SuccessCriteria.TestTimeout, webTest.ParseDependentRequests, webTest.RetriesForWebTestFailure);
+            resource.CreateWebTestProperties(TestLocations.AuSydney, webTest.Status, webTest.Frequency, webTest.SuccessCriteria.Timeout, webTest.ParseDependentRequests, webTest.RetriesForWebTestFailure);
 
             var result = await client.Resources.CreateOrUpdateAsync(this._appInsights.ResourceGroup, resource.ResourceIdentity, resource).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
@@ -46,8 +45,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
                 throw new ArgumentOutOfRangeException(nameof(expectedHttpStatusCode));
             }
 
-            if (expectedHttpStatusCode != 0
-                && Enum.GetValues(typeof(HttpStatusCode)).Cast<int>().All(p => p != expectedHttpStatusCode))
+            if (expectedHttpStatusCode != 0 && !Enum.IsDefined(typeof(HttpStatusCode), expectedHttpStatusCode))
             {
                 throw new InvalidHttpStatusCodeException();
             }
