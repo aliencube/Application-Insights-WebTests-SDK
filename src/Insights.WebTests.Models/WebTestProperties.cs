@@ -44,7 +44,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         public TestStatus TestStatus { get; set; }
 
         /// <summary>
-        /// Gets the test frequency value in seconds. This is a calculated value from <see cref="TestFrequency"/>.
+        /// Gets the test frequency value in seconds. This is a calculated value from <see cref="Options.TestFrequency"/>.
         /// </summary>
         public int Frequency => (int)this.TestFrequency * 60;
 
@@ -55,7 +55,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         public TestFrequency TestFrequency { get; set; }
 
         /// <summary>
-        /// Gets the test timeout value in seconds. This is a read-only value from <see cref="TestTimeout"/>.
+        /// Gets the test timeout value in seconds. This is a read-only value from <see cref="Options.TestTimeout"/>.
         /// </summary>
         public int Timeout => (int)this.TestTimeout;
 
@@ -66,12 +66,12 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         public TestTimeout TestTimeout { get; set; }
 
         /// <summary>
-        /// Gets or sets the web test kind.
+        /// Gets the web test kind.
         /// </summary>
-        public string Kind { get; set; }
+        public abstract string Kind { get; }
 
         /// <summary>
-        /// Gets the value indicating whether to enable retries when the web test fails. This is a calculated value from <see cref="EnableRetriesForWebTestFailure"/>.
+        /// Gets the value indicating whether to enable retries when the web test fails. This is a calculated value from <see cref="RetriesForWebTestFailure"/>.
         /// </summary>
         public bool RetryEnabled => this.EnableRetriesForWebTestFailure == RetriesForWebTestFailure.Enable;
 

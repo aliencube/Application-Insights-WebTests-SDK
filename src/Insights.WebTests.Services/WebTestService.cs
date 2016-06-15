@@ -126,66 +126,59 @@ namespace Aliencube.Azure.Insights.WebTests.Services
             throw new HttpResponseException(result.StatusCode);
         }
 
-        ///// <summary>
-        ///// Creates or updates web test resource.
-        ///// </summary>
-        ///// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
-        ///// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
-        ///// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
-        ///// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
-        //public async Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource)
-        //{
-        //    if (webTest == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(webTest));
-        //    }
+        /// <summary>
+        /// Creates or updates web test resource.
+        /// </summary>
+        /// <param name="name">Name of the web test.</param>
+        /// <param name="url">URL of the web test.</param>
+        /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
+        /// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
+        /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
+        /// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
+        public async Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(string name, string url, WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
 
-        //    if (webTest.TestType != TestType.UrlPingTest)
-        //    {
-        //        throw new InvalidOperationException("Invalid web test type");
-        //    }
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
 
-        //    if (client == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(client));
-        //    }
+            if (webTest == null)
+            {
+                throw new ArgumentNullException(nameof(webTest));
+            }
 
-        //    if (insightsResource == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(insightsResource));
-        //    }
+            // TODO: for now it only supports PING test.
+            if (webTest.TestType != TestType.UrlPingTest)
+            {
+                throw new InvalidOperationException("Invalid web test type");
+            }
 
-        //    var name = "name";
-        //    var url = "url";
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
 
-        //    var monitorId = $"{name}-{this._appInsights.Name}";
-        //    var identity = new ResourceIdentity(monitorId, "microsoft.insights/webtests", "2015-05-01");
+            if (insightsResource == null)
+            {
+                throw new ArgumentNullException(nameof(insightsResource));
+            }
 
-        //    var resource = new GenericResource(insightsResource.Location)
-        //    {
-        //        Tags =
-        //                               {
-        //                                   { $"hidden-link:{insightsResource.Id}", "Resource" }
-        //                               },
-        //        Properties = new PingWebTestProperties()
-        //        {
-        //            Name = "name",
-        //            SyntheticMonitorId = monitorId,
-        //            TestStatus = webTest.TestStatus,
-        //            Configuration = new PingWebTestConfiguration(url),
-        //            Locations = WebTestLocations.GetWebTestLocations(TestLocations.AuSydney),
-        //            EnableRetriesForWebTestFailure = webTest.RetriesForWebTestFailure,
-        //        }
-        //    };
+            var resource = new WebTestResource(name, url, insightsResource, webTest.TestType);
+            resource.CreateWebTestProperties(TestLocations.AuSydney, webTest.Status, webTest.Frequency, webTest.SuccessCriteria.TestTimeout, webTest.ParseDependentRequests, webTest.RetriesForWebTestFailure);
 
-        //    var result = await client.Resources.CreateOrUpdateAsync(this._appInsights.ResourceGroup, identity, resource).ConfigureAwait(false);
-        //    if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
-        //    {
-        //        return result.Resource;
-        //    }
+            var result = await client.Resources.CreateOrUpdateAsync(this._appInsights.ResourceGroup, resource.ResourceIdentity, resource).ConfigureAwait(false);
+            if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
+            {
+                return result.Resource;
+            }
 
-        //    throw new HttpResponseException(result.StatusCode);
-        //}
+            throw new HttpResponseException(result.StatusCode);
+        }
 
         ///// <summary>
         ///// Creates or updates alert resource.
