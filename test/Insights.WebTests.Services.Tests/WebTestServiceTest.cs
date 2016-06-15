@@ -33,7 +33,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         private readonly Mock<AuthenticationElement> _auth;
         private readonly Mock<ApplicationInsightsElement> _appInsights;
         private readonly Mock<WebTestElement> _webTest;
-        private readonly WebTestElementCollection _webtests;
+        private readonly WebTestElementCollection _webTests;
         private readonly Mock<IWebTestSettingsElement> _settings;
         private readonly Mock<IAuthenticationResultWrapper> _authResult;
         private readonly Mock<IAuthenticationContextWrapper> _authContext;
@@ -52,7 +52,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             this._auth = fixture.AuthenticationElement;
             this._appInsights = fixture.ApplicationInsightsElement;
             this._webTest = fixture.WebTestElement;
-            this._webtests = fixture.WebTestElementCollection;
+            this._webTests = fixture.WebTestElementCollection;
             this._settings = fixture.WebTestSettingsElement;
             this._authResult = fixture.AuthenticationResult;
             this._authContext = fixture.AuthenticationContext;
@@ -228,8 +228,8 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         }
 
         [Theory]
-        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, "RESOURCE_GROUP", HttpStatusCode.BadRequest)]
-        public void Given_InvalidHttpStatusCode_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, string resourceGroup, HttpStatusCode statusCode)
+        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", HttpStatusCode.BadRequest)]
+        public void Given_InvalidHttpStatusCode_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, TestLocations testLocations, string resourceGroup, HttpStatusCode statusCode)
         {
             var successCriteria = new Mock<SucessCriteriaElement>();
             successCriteria.SetupGet(p => p.Timeout).Returns(testTimeout);
@@ -240,6 +240,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             this._webTest.SetupGet(p => p.ParseDependentRequests).Returns(parseDependentRequests);
             this._webTest.SetupGet(p => p.SuccessCriteria).Returns(successCriteria.Object);
             this._webTest.SetupGet(p => p.RetriesForWebTestFailure).Returns(retriesForWebTestFailure);
+            this._webTest.SetupGet(p => p.TestLocations).Returns(testLocations);
 
             this._appInsights.SetupGet(p => p.ResourceGroup).Returns(resourceGroup);
 
@@ -258,8 +259,8 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         }
 
         [Theory]
-        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, "RESOURCE_GROUP", "Central US")]
-        public async void Given_Parameters_CreateOrUpdateWebTestAsync_ShouldReturn_Result(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, string resourceGroup, string location)
+        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", HttpStatusCode.BadRequest)]
+        public async void Given_Parameters_CreateOrUpdateWebTestAsync_ShouldReturn_Result(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, TestLocations testLocations, string resourceGroup, string location)
         {
             var successCriteria = new Mock<SucessCriteriaElement>();
             successCriteria.SetupGet(p => p.Timeout).Returns(testTimeout);
@@ -270,6 +271,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             this._webTest.SetupGet(p => p.ParseDependentRequests).Returns(parseDependentRequests);
             this._webTest.SetupGet(p => p.SuccessCriteria).Returns(successCriteria.Object);
             this._webTest.SetupGet(p => p.RetriesForWebTestFailure).Returns(retriesForWebTestFailure);
+            this._webTest.SetupGet(p => p.TestLocations).Returns(testLocations);
 
             this._appInsights.SetupGet(p => p.ResourceGroup).Returns(resourceGroup);
 

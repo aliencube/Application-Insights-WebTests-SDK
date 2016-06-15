@@ -36,12 +36,8 @@
       <HintPath>..\..\packages\Aliencube.AdalWrapper.1.0.0.5\lib\net45\Aliencube.AdalWrapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Aliencube.CaseInsensitiveEnumConverter, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Aliencube.CaseInsensitiveEnumConverter.1.0.0.2\lib\net45\Aliencube.CaseInsensitiveEnumConverter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Aliencube.CommaDelimitedListConverter, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Aliencube.CommaDelimitedListConverter.1.0.0.2\lib\net45\Aliencube.CommaDelimitedListConverter.dll</HintPath>
+    <Reference Include="Aliencube.ConfigurationValueConverter, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Aliencube.ConfigurationValueConverter.1.0.0.4\lib\net45\Aliencube.ConfigurationValueConverter.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hyak.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

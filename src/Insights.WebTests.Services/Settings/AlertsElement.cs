@@ -5,7 +5,7 @@ using System.Configuration;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
-using Aliencube.ConfigurationConverters;
+using Aliencube.ConfigurationValueConverter;
 
 namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {

@@ -5,7 +5,7 @@ using System.Configuration;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
-using Aliencube.ConfigurationConverters;
+using Aliencube.ConfigurationValueConverter;
 
 namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {
@@ -110,10 +110,10 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         /// Gets or sets the list of test locations delimited by commas.
         /// </summary>
         [ConfigurationProperty("testLocations", IsRequired = true)]
-        [TypeConverter(typeof(CommaDelimitedListConverter<TestLocations>))]
-        public virtual List<TestLocations> TestLocations
+        [TypeConverter(typeof(PipeDelimitedFlaggedEnumConverter<TestLocations>))]
+        public virtual TestLocations TestLocations
         {
-            get { return (List<TestLocations>)this["testLocations"]; }
+            get { return (TestLocations)this["testLocations"]; }
             set { this["testLocations"] = value; }
         }
 
