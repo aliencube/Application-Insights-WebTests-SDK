@@ -27,12 +27,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns the <see cref="SubscriptionCloudCredentials"/> instance as Azure subscription credentials.</returns>
         Task<SubscriptionCloudCredentials> GetCredentialsAsync();
 
-        ///// <summary>
-        ///// Gets the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.
-        ///// </summary>
-        ///// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
-        ///// <returns>Returns the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.</returns>
-        //Task<GenericResourceExtended> GetInsightsResourceAsync(IResourceManagementClient client);
+        /// <summary>
+        /// Gets the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.
+        /// </summary>
+        /// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
+        /// <returns>Returns the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.</returns>
+        Task<GenericResourceExtended> GetInsightsResourceAsync(IResourceManagementClient client);
 
         ///// <summary>
         ///// Creates or updates web test resource.

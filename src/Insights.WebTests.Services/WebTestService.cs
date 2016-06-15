@@ -24,6 +24,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
     /// </summary>
     public class WebTestService : IWebTestService
     {
+        private const string InsightsResourceType = "microsoft.insights/components";
+        private const string InsightsApiVersion = "2015-05-01";
+
         private readonly AuthenticationElement _auth;
         private readonly ApplicationInsightsElement _appInsights;
         private readonly List<WebTestElement> _webTests;
@@ -65,10 +68,10 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         {
             var credentials = await this.GetCredentialsAsync().ConfigureAwait(false);
 
-            //this._resourceManagementClient = new ResourceManagementClient(credentials);
-            //this._insightsManagementClient = new InsightsManagementClient(credentials);
+            this._resourceManagementClient = new ResourceManagementClient(credentials);
+            this._insightsManagementClient = new InsightsManagementClient(credentials);
 
-            //var insightsResource = await this.GetInsightsResourceAsync(this._resourceManagementClient).ConfigureAwait(false);
+            var insightsResource = await this.GetInsightsResourceAsync(this._resourceManagementClient).ConfigureAwait(false);
 
             //foreach (var webTest in this._webTests.OfType<WebTestElement>())
             //{
@@ -101,27 +104,27 @@ namespace Aliencube.Azure.Insights.WebTests.Services
             return new TokenCloudCredentials(this._appInsights.SubscriptionId, result.AccessToken);
         }
 
-        ///// <summary>
-        ///// Gets the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.
-        ///// </summary>
-        ///// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
-        ///// <returns>Returns the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.</returns>
-        //public async Task<GenericResourceExtended> GetInsightsResourceAsync(IResourceManagementClient client)
-        //{
-        //    if (client == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(client));
-        //    }
+        /// <summary>
+        /// Gets the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.
+        /// </summary>
+        /// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
+        /// <returns>Returns the <see cref="GenericResourceExtended"/> instance as an Application Insights resource.</returns>
+        public async Task<GenericResourceExtended> GetInsightsResourceAsync(IResourceManagementClient client)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
 
-        //    var identity = new ResourceIdentity(this._appInsights.Name, "microsoft.insights/components", "2015-05-01");
-        //    var result = await client.Resources.GetAsync(this._appInsights.ResourceGroup, identity).ConfigureAwait(false);
-        //    if (result.StatusCode == HttpStatusCode.OK)
-        //    {
-        //        return result.Resource;
-        //    }
+            var identity = new ResourceIdentity(this._appInsights.Name, InsightsResourceType, InsightsApiVersion);
+            var result = await client.Resources.GetAsync(this._appInsights.ResourceGroup, identity).ConfigureAwait(false);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                return result.Resource;
+            }
 
-        //    throw new HttpResponseException(result.StatusCode);
-        //}
+            throw new HttpResponseException(result.StatusCode);
+        }
 
         ///// <summary>
         ///// Creates or updates web test resource.

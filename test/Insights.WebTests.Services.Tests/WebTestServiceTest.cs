@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 using Aliencube.AdalWrapper;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
@@ -7,6 +11,9 @@ using Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures;
 using FluentAssertions;
 
 using Microsoft.Azure;
+using Microsoft.Azure.Management.Insights;
+using Microsoft.Azure.Management.Resources;
+using Microsoft.Azure.Management.Resources.Models;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 using Moq;
@@ -26,6 +33,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         private readonly Mock<IWebTestSettingsElement> _settings;
         private readonly Mock<IAuthenticationResultWrapper> _authResult;
         private readonly Mock<IAuthenticationContextWrapper> _authContext;
+        private readonly Mock<IResourceOperations> _resourceOperations;
+        private readonly Mock<IResourceManagementClient> _resourceClient;
+        private readonly Mock<IInsightsManagementClient> _insightsClient;
 
         private IWebTestService _service;
 
@@ -41,6 +51,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             this._settings = fixture.WebTestSettingsElement;
             this._authResult = fixture.AuthenticationResult;
             this._authContext = fixture.AuthenticationContext;
+            this._resourceOperations = fixture.ResourceOperations;
+            this._resourceClient = fixture.ResourceManagementClient;
+            this._insightsClient = fixture.InsightsManagementClient;
             this._service = fixture.WebTestService;
         }
 
@@ -124,6 +137,53 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             result.Should().NotBeNull();
             result.SubscriptionId.Should().BeEquivalentTo(this._appInsights.Object.SubscriptionId);
             result.Token.Should().BeEquivalentTo(accessToken);
+        }
+
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        [Fact]
+        public void Given_NullParameter_GetInsightsResourceAsync_ShouldThrow_Exception()
+        {
+            Func<Task> func = async () => { var result = await this._service.GetInsightsResourceAsync(null).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Theory]
+        [InlineData("APPLICATION_INSIGHTS_NAME", "RESOURCE_GROUP_NAME", HttpStatusCode.BadRequest)]
+        public void Given_InvalidHttpStatusCode_GetInsightsResourceAsync_ShouldThrow_Exception(string appInsightsName, string resourceGroup, HttpStatusCode statusCode)
+        {
+            this._appInsights.SetupGet(p => p.Name).Returns(appInsightsName);
+            this._appInsights.SetupGet(p => p.ResourceGroup).Returns(resourceGroup);
+
+            this._settings.SetupGet(p => p.ApplicationInsight).Returns(this._appInsights.Object);
+
+            var resourceResult = new ResourceGetResult() { StatusCode = statusCode };
+            this._resourceOperations.Setup(p => p.GetAsync(It.IsAny<string>(), It.IsAny<ResourceIdentity>(), It.IsAny<CancellationToken>())).ReturnsAsync(resourceResult);
+
+            this._resourceClient.SetupGet(p => p.Resources).Returns(this._resourceOperations.Object);
+
+            Func<Task> func = async () => { var result = await this._service.GetInsightsResourceAsync(this._resourceClient.Object).ConfigureAwait(false); };
+            func.ShouldThrow<HttpResponseException>().And.Response.StatusCode.Should().Be(statusCode);
+        }
+
+        [Theory]
+        [InlineData("APPLICATION_INSIGHTS_NAME", "RESOURCE_GROUP_NAME", "Central US")]
+        public async void Given_Parameter_GetInsightsResourceAsync_ShouldReturn_Result(string appInsightsName, string resourceGroup, string location)
+        {
+            this._appInsights.SetupGet(p => p.Name).Returns(appInsightsName);
+            this._appInsights.SetupGet(p => p.ResourceGroup).Returns(resourceGroup);
+
+            this._settings.SetupGet(p => p.ApplicationInsight).Returns(this._appInsights.Object);
+
+            var resource = new GenericResourceExtended(location);
+            var resourceResult = new ResourceGetResult() { StatusCode = HttpStatusCode.OK, Resource = resource };
+            this._resourceOperations.Setup(p => p.GetAsync(It.IsAny<string>(), It.IsAny<ResourceIdentity>(), It.IsAny<CancellationToken>())).ReturnsAsync(resourceResult);
+
+            this._resourceClient.SetupGet(p => p.Resources).Returns(this._resourceOperations.Object);
+
+            var result = await this._service.GetInsightsResourceAsync(this._resourceClient.Object).ConfigureAwait(false);
+            result.Location.Should().BeEquivalentTo(location);
         }
     }
 }

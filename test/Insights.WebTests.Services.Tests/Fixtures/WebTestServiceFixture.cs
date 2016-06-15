@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Linq;
 
 using Aliencube.AdalWrapper;
-using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
+
+using Castle.Core.Resource;
+
+using Microsoft.Azure.Management.Insights;
+using Microsoft.Azure.Management.Resources;
 
 using Moq;
 
@@ -35,6 +38,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
             this.AuthenticationResult = new Mock<IAuthenticationResultWrapper>();
 
             this.AuthenticationContext = new Mock<IAuthenticationContextWrapper>();
+
+            this.ResourceOperations = new Mock<IResourceOperations>();
+
+            this.ResourceManagementClient = new Mock<IResourceManagementClient>();
+
+            this.InsightsManagementClient = new Mock<IInsightsManagementClient>();
 
             this.WebTestService = new WebTestService(this.WebTestSettingsElement.Object, this.AuthenticationContext.Object);
         }
@@ -68,6 +77,21 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
         /// Gets the <see cref="Mock{IAuthenticationContextWrapper}"/> instance.
         /// </summary>
         public Mock<IAuthenticationContextWrapper> AuthenticationContext { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IResourceOperations}"/> instance.
+        /// </summary>
+        public Mock<IResourceOperations> ResourceOperations { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IResourceManagementClient}"/> instance.
+        /// </summary>
+        public Mock<IResourceManagementClient> ResourceManagementClient { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IInsightsManagementClient}"/> instance.
+        /// </summary>
+        public Mock<IInsightsManagementClient> InsightsManagementClient { get; }
 
         /// <summary>
         /// Gets the <see cref="IWebTestService"/> instance.
