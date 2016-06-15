@@ -45,14 +45,14 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns the <see cref="GenericResourceExtended"/> instance as a web test resource.</returns>
         Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(string name, string url, WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource);
 
-        ///// <summary>
-        ///// Creates or updates alert resource.
-        ///// </summary>
-        ///// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
-        ///// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
-        ///// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
-        ///// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
-        ///// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
-        //Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource);
+        /// <summary>
+        /// Creates or updates alert resource.
+        /// </summary>
+        /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
+        /// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
+        /// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
+        /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
+        /// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
+        Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource);
     }
 }

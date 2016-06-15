@@ -88,6 +88,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         /// <summary>
         /// Tests whether the method should return result or not.
         /// </summary>
+        /// <param name="accessToken">Access token value.</param>
         [Theory]
         [InlineData("ACCESS_TOKEN")]
         public async void Given_ClientCredential_GetCredentialsAsync_ShouldReturn_Result(string accessToken)
@@ -117,6 +118,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         /// <summary>
         /// Tests whether the method should return result or not.
         /// </summary>
+        /// <param name="accessToken">Access token value.</param>
         [Theory]
         [InlineData("ACCESS_TOKEN")]
         public async void Given_UserCredential_GetCredentialsAsync_ShouldReturn_Result(string accessToken)
@@ -154,6 +156,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             func.ShouldThrow<ArgumentNullException>();
         }
 
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="appInsightsName">Application Insights resource name.</param>
+        /// <param name="resourceGroup">Resource group name.</param>
+        /// <param name="statusCode"><see cref="HttpStatusCode"/> value.</param>
         [Theory]
         [InlineData("APPLICATION_INSIGHTS_NAME", "RESOURCE_GROUP_NAME", HttpStatusCode.BadRequest)]
         public void Given_InvalidHttpStatusCode_GetInsightsResourceAsync_ShouldThrow_Exception(string appInsightsName, string resourceGroup, HttpStatusCode statusCode)
@@ -172,6 +180,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             func.ShouldThrow<HttpResponseException>().And.Response.StatusCode.Should().Be(statusCode);
         }
 
+        /// <summary>
+        /// Tests whether the method should return result or not.
+        /// </summary>
+        /// <param name="appInsightsName">Application Insights resource name.</param>
+        /// <param name="resourceGroup">Resource group name.</param>
+        /// <param name="location">Resource location.</param>
         [Theory]
         [InlineData("APPLICATION_INSIGHTS_NAME", "RESOURCE_GROUP_NAME", "Central US")]
         public async void Given_Parameter_GetInsightsResourceAsync_ShouldReturn_Result(string appInsightsName, string resourceGroup, string location)
@@ -191,6 +205,13 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             result.Location.Should().BeEquivalentTo(location);
         }
 
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="url">Web test URL.</param>
+        /// <param name="testType">Web test type.</param>
+        /// <param name="location">Web test resource location.</param>
         [Theory]
         [InlineData("WEBTEST_NAME", "http://localhost", TestType.UrlPingTest, "Central US")]
         public void Given_NullParameters_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestType testType, string location)
@@ -215,6 +236,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             func.ShouldThrow<ArgumentNullException>();
         }
 
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="url">Web test URL.</param>
+        /// <param name="testType">Web test type.</param>
         [Theory]
         [InlineData("WEBTEST_NAME", "http://localhost", TestType.MultiStepTest)]
         public void Given_InvalidTestType_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestType testType)
@@ -227,6 +254,19 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             func.ShouldThrow<InvalidOperationException>();
         }
 
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="url">Web test URL.</param>
+        /// <param name="testStatus"><see cref="TestStatus"/> value.</param>
+        /// <param name="testFrequency"><see cref="TestFrequency"/> value.</param>
+        /// <param name="testTimeout"><see cref="TestTimeout"/> value.</param>
+        /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
+        /// <param name="retriesForWebTestFailure">Value indicating whether to retry for web test failure or not.</param>
+        /// <param name="testLocations"><see cref="TestLocations"/> value.</param>
+        /// <param name="resourceGroup">Resource group name.</param>
+        /// <param name="statusCode"><see cref="HttpStatusCode"/> value.</param>
         [Theory]
         [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", HttpStatusCode.BadRequest)]
         public void Given_InvalidHttpStatusCode_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, TestLocations testLocations, string resourceGroup, HttpStatusCode statusCode)
@@ -258,8 +298,21 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             func.ShouldThrow<HttpResponseException>().And.Response.StatusCode.Should().Be(statusCode);
         }
 
+        /// <summary>
+        /// Tests whether the method should return result or not.
+        /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="url">Web test URL.</param>
+        /// <param name="testStatus"><see cref="TestStatus"/> value.</param>
+        /// <param name="testFrequency"><see cref="TestFrequency"/> value.</param>
+        /// <param name="testTimeout"><see cref="TestTimeout"/> value.</param>
+        /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
+        /// <param name="retriesForWebTestFailure">Value indicating whether to retry for web test failure or not.</param>
+        /// <param name="testLocations"><see cref="TestLocations"/> value.</param>
+        /// <param name="resourceGroup">Resource group name.</param>
+        /// <param name="location">Resouce location.</param>
         [Theory]
-        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", HttpStatusCode.BadRequest)]
+        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", "Central US")]
         public async void Given_Parameters_CreateOrUpdateWebTestAsync_ShouldReturn_Result(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, TestLocations testLocations, string resourceGroup, string location)
         {
             var successCriteria = new Mock<SucessCriteriaElement>();
@@ -288,6 +341,30 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
 
             var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false);
             result.Location.Should().BeEquivalentTo(location);
+        }
+
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="location">Resource location.</param>
+        [Theory]
+        [InlineData("Central US")]
+        public void Given_NullParameters_CreateOrUpdateAlertsAsync_ShouldThrow_Exception(string location)
+        {
+            var webTestResource = new ResourceBaseExtended(location);
+            var insightsResource = new ResourceBaseExtended(location);
+
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(null, this._insightsClient.Object, webTestResource, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(this._webTest.Object, null, webTestResource, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(this._webTest.Object, this._insightsClient.Object, null, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(this._webTest.Object, this._insightsClient.Object, webTestResource, null).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
         }
     }
 }

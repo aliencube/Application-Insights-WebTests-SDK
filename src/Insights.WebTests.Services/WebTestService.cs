@@ -180,81 +180,81 @@ namespace Aliencube.Azure.Insights.WebTests.Services
             throw new HttpResponseException(result.StatusCode);
         }
 
-        ///// <summary>
-        ///// Creates or updates alert resource.
-        ///// </summary>
-        ///// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
-        ///// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
-        ///// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
-        ///// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
-        ///// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
-        //public async Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource)
-        //{
-        //    if (webTest == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(webTest));
-        //    }
+        /// <summary>
+        /// Creates or updates alert resource.
+        /// </summary>
+        /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
+        /// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
+        /// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
+        /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
+        /// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
+        public async Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource)
+        {
+            if (webTest == null)
+            {
+                throw new ArgumentNullException(nameof(webTest));
+            }
 
-        //    if (client == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(client));
-        //    }
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
 
-        //    if (webTestResource == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(webTestResource));
-        //    }
+            if (webTestResource == null)
+            {
+                throw new ArgumentNullException(nameof(webTestResource));
+            }
 
-        //    if (insightsResource == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(insightsResource));
-        //    }
+            if (insightsResource == null)
+            {
+                throw new ArgumentNullException(nameof(insightsResource));
+            }
 
-        //    var name = "name";
-        //    var alertName = $"{name}-alert";
+            var name = "name";
+            var alertName = $"{name}-alert";
 
-        //    var ruleEmailAction = new RuleEmailAction() { SendToServiceOwners = webTest.Alerts.SendAlertToAdmin };
-        //    if (webTest.Alerts.Recipients != null && webTest.Alerts.Recipients.Any())
-        //    {
-        //        ruleEmailAction.CustomEmails = webTest.Alerts.Recipients;
-        //    }
+            var ruleEmailAction = new RuleEmailAction() { SendToServiceOwners = webTest.Alerts.SendAlertToAdmin };
+            if (webTest.Alerts.Recipients != null && webTest.Alerts.Recipients.Any())
+            {
+                ruleEmailAction.CustomEmails = webTest.Alerts.Recipients;
+            }
 
-        //    var parameters = new RuleCreateOrUpdateParameters
-        //    {
-        //        Tags =
-        //                                 {
-        //                                     { $"hidden-link:{insightsResource.Id}", "Resource" },
-        //                                     { $"hidden-link:{webTestResource.Id}", "Resource" }
-        //                                 },
-        //        Location = "East US",
-        //        Properties = new Rule()
-        //        {
-        //            Name = alertName,
-        //            Description = string.Empty,
-        //            IsEnabled = webTest.Alerts.IsEnabled,
-        //            LastUpdatedTime = DateTime.UtcNow,
-        //            Actions = { ruleEmailAction },
-        //            Condition = new LocationThresholdRuleCondition
-        //            {
-        //                DataSource = new RuleMetricDataSource
-        //                {
-        //                    MetricName = "GSMT_AvRaW",
-        //                    ResourceUri = webTestResource.Id
-        //                },
-        //                FailedLocationCount = webTest.Alerts.AlertLocationThreshold,
-        //                WindowSize = TimeSpan.FromMinutes((int)webTest.Alerts.TestAlertFailureTimeWindow)
-        //            },
-        //        },
-        //    };
+            var parameters = new RuleCreateOrUpdateParameters
+            {
+                Tags =
+                                         {
+                                             { $"hidden-link:{insightsResource.Id}", "Resource" },
+                                             { $"hidden-link:{webTestResource.Id}", "Resource" }
+                                         },
+                Location = "East US",
+                Properties = new Rule()
+                {
+                    Name = alertName,
+                    Description = string.Empty,
+                    IsEnabled = webTest.Alerts.IsEnabled,
+                    LastUpdatedTime = DateTime.UtcNow,
+                    Actions = { ruleEmailAction },
+                    Condition = new LocationThresholdRuleCondition
+                    {
+                        DataSource = new RuleMetricDataSource
+                        {
+                            MetricName = "GSMT_AvRaW",
+                            ResourceUri = webTestResource.Id
+                        },
+                        FailedLocationCount = webTest.Alerts.AlertLocationThreshold,
+                        WindowSize = TimeSpan.FromMinutes((int)webTest.Alerts.TestAlertFailureTimeWindow)
+                    },
+                },
+            };
 
-        //    var result = await client.AlertOperations.CreateOrUpdateRuleAsync(this._appInsights.ResourceGroup, parameters).ConfigureAwait(false);
-        //    if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
-        //    {
-        //        return true;
-        //    }
+            var result = await client.AlertOperations.CreateOrUpdateRuleAsync(this._appInsights.ResourceGroup, parameters).ConfigureAwait(false);
+            if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
 
-        //    throw new HttpResponseException(result.StatusCode);
-        //}
+            throw new HttpResponseException(result.StatusCode);
+        }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
