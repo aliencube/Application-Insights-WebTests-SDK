@@ -19,6 +19,13 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <summary>
         /// Processes creating web test resources.
         /// </summary>
+        /// <param name="options"><see cref="CommandBuildOptions"/> instance.</param>
+        /// <returns>Returns <c>True</c>; if processed successfully; otherwise returns <c>False</c>.</returns>
+        Task<bool> ProcessAsync(CommandBuildOptions options);
+
+        /// <summary>
+        /// Processes creating web test resources.
+        /// </summary>
         /// <param name="name">Web test name.</param>
         /// <param name="url">Web test URL.</param>
         /// <param name="testType"><see cref="TestType"/> value. Default is <c>TestType.UriPingTest</c>.</param>

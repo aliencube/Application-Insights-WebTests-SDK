@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 
 using Aliencube.Azure.Insights.WebTests.Models;
+using Aliencube.Azure.Insights.WebTests.Models.Extensions;
 using Aliencube.Azure.Insights.WebTests.Models.Serialisation;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
 

@@ -461,7 +461,10 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         [InlineData("WEBTEST_NAME", "http://localhost")]
         public void Given_NullParameter_ProcessAsync_ShouldThrow_Exception(string name, string url)
         {
-            Func<Task> func = async () => { var result = await this._service.ProcessAsync(null, url).ConfigureAwait(false); };
+            Func<Task> func = async () => { var result = await this._service.ProcessAsync(null).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.ProcessAsync(null, url).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
             func = async () => { var result = await this._service.ProcessAsync(name, null).ConfigureAwait(false); };

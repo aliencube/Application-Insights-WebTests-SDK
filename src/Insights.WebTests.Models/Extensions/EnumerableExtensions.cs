@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Aliencube.Azure.Insights.WebTests.Services.Extensions
+namespace Aliencube.Azure.Insights.WebTests.Models.Extensions
 {
     /// <summary>
     /// This represents the extension entity for the <see cref="IEnumerable{T}"/> instance.
