@@ -67,8 +67,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// </summary>
         /// <param name="name">Web test name.</param>
         /// <param name="url">Web test URL.</param>
+        /// <param name="testType"><see cref="TestType"/> value. Default is <c>TestType.UriPingTest</c>.</param>
         /// <returns>Returns <c>True</c>; if processed successfully; otherwise returns <c>False</c>.</returns>
-        public async Task<bool> ProcessAsync(string name, string url)
+        public async Task<bool> ProcessAsync(string name, string url, TestType testType = TestType.UrlPingTest)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -87,14 +88,17 @@ namespace Aliencube.Azure.Insights.WebTests.Services
 
             var insightsResource = await this.GetInsightsResourceAsync(this._resourceManagementClient).ConfigureAwait(false);
 
-            foreach (var webTest in this._webTests)
+            var webTest = this._webTests.SingleOrDefault(p => p.TestType == testType);
+            if (webTest == null)
             {
-                var webTestResource = await this.CreateOrUpdateWebTestAsync(name, url, webTest, this._resourceManagementClient, insightsResource).ConfigureAwait(false);
-
-                await this.CreateOrUpdateAlertsAsync(name, webTest, this._insightsManagementClient, webTestResource, insightsResource).ConfigureAwait(false);
+                return false;
             }
 
-            return true;
+            var webTestResource = await this.CreateOrUpdateWebTestAsync(name, url, webTest, this._resourceManagementClient, insightsResource).ConfigureAwait(false);
+
+            var result = await this.CreateOrUpdateAlertsAsync(name, webTest, this._insightsManagementClient, webTestResource, insightsResource).ConfigureAwait(false);
+
+            return result;
         }
 
         /// <summary>

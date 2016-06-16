@@ -34,12 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aliencube.CaseInsensitiveEnumConverter, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Aliencube.CaseInsensitiveEnumConverter.1.0.0.2\lib\net45\Aliencube.CaseInsensitiveEnumConverter.dll</HintPath>
+    <Reference Include="Aliencube.ConfigurationValueConverter, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Aliencube.ConfigurationValueConverter.1.0.0.4\lib\net45\Aliencube.ConfigurationValueConverter.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Aliencube.CommaDelimitedListConverter, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Aliencube.CommaDelimitedListConverter.1.0.0.2\lib\net45\Aliencube.CommaDelimitedListConverter.dll</HintPath>
+    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hyak.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -154,6 +154,10 @@
     <ProjectReference Include="..\Insights.WebTests.Models\Insights.WebTests.Models.csproj">
       <Project>{d275254c-11cd-43ac-a0da-c1f31bd38ded}</Project>
       <Name>Insights.WebTests.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Insights.WebTests.Services\Insights.WebTests.Services.csproj">
+      <Project>{db2b56a6-4c94-463d-a2a2-8ee56a138610}</Project>
+      <Name>Insights.WebTests.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

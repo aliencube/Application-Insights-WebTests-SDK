@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
+using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
 
 using Microsoft.Azure;
@@ -20,8 +21,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// </summary>
         /// <param name="name">Web test name.</param>
         /// <param name="url">Web test URL.</param>
+        /// <param name="testType"><see cref="TestType"/> value. Default is <c>TestType.UriPingTest</c>.</param>
         /// <returns>Returns <c>True</c>; if processed successfully; otherwise returns <c>False</c>.</returns>
-        Task<bool> ProcessAsync(string name, string url);
+        Task<bool> ProcessAsync(string name, string url, TestType testType = TestType.UrlPingTest);
 
         /// <summary>
         /// Gets the <see cref="SubscriptionCloudCredentials"/> instance as Azure subscription credentials.
