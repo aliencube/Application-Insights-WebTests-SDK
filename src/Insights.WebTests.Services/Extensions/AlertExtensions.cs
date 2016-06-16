@@ -13,12 +13,19 @@ using Microsoft.Azure.Management.Insights.Models;
 namespace Aliencube.Azure.Insights.WebTests.Services.Extensions
 {
     /// <summary>
-    /// This represents the extensions entity for the <see cref="WebTestConfiguration"/> class.
+    /// This represents the extensions entity for the <see cref="RuleCreateOrUpdateParameters"/> class.
     /// </summary>
     public static class AlertExtensions
     {
         private const string AlertMetricName = "GSMT_AvRaW";
 
+        /// <summary>
+        /// Adds tags for web test alert.
+        /// </summary>
+        /// <param name="parameters"><see cref="RuleCreateOrUpdateParameters"/> instance.</param>
+        /// <param name="webTest"><see cref="ResourceBaseExtended"/> instance representing web test resource.</param>
+        /// <param name="insights"><see cref="ResourceBaseExtended"/> instance representing Application Insights resource.</param>
+        /// <returns>Returns the <see cref="RuleCreateOrUpdateParameters"/> instance with tags added.</returns>
         public static RuleCreateOrUpdateParameters AddTags(this RuleCreateOrUpdateParameters parameters, ResourceBaseExtended webTest, ResourceBaseExtended insights)
         {
             if (parameters == null)
@@ -42,6 +49,15 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Extensions
             return parameters;
         }
 
+        /// <summary>
+        /// Adds properties for web test alert.
+        /// </summary>
+        /// <param name="parameters"><see cref="RuleCreateOrUpdateParameters"/> instance.</param>
+        /// <param name="name">Name of web test.</param>
+        /// <param name="element"><see cref="WebTestElement"/> instance from App.config/Web.config.</param>
+        /// <param name="webTest"><see cref="ResourceBaseExtended"/> instance representing web test resource.</param>
+        /// <param name="insights"><see cref="ResourceBaseExtended"/> instance representing Application Insights resource.</param>
+        /// <returns>Returns the <see cref="RuleCreateOrUpdateParameters"/> instance with properties added.</returns>
         public static RuleCreateOrUpdateParameters AddProperties(this RuleCreateOrUpdateParameters parameters, string name, WebTestElement element, ResourceBaseExtended webTest, ResourceBaseExtended insights)
         {
             if (parameters == null)

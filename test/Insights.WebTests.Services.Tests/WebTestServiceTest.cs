@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +14,7 @@ using FluentAssertions;
 
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Insights;
+using Microsoft.Azure.Management.Insights.Models;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
@@ -21,7 +22,6 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Moq;
 
 using Xunit;
-using Xunit.Sdk;
 
 namespace Aliencube.Azure.Insights.WebTests.Services.Tests
 {
@@ -38,6 +38,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         private readonly Mock<IAuthenticationResultWrapper> _authResult;
         private readonly Mock<IAuthenticationContextWrapper> _authContext;
         private readonly Mock<IResourceOperations> _resourceOperations;
+        private readonly Mock<IAlertOperations> _alertOperations;
         private readonly Mock<IResourceManagementClient> _resourceClient;
         private readonly Mock<IInsightsManagementClient> _insightsClient;
 
@@ -57,6 +58,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             this._authResult = fixture.AuthenticationResult;
             this._authContext = fixture.AuthenticationContext;
             this._resourceOperations = fixture.ResourceOperations;
+            this._alertOperations = fixture.AlertOperations;
             this._resourceClient = fixture.ResourceManagementClient;
             this._insightsClient = fixture.InsightsManagementClient;
             this._service = fixture.WebTestService;
@@ -369,6 +371,85 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
 
             func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(name, this._webTest.Object, this._insightsClient.Object, webTestResource, null).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
+        }
+
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="sendAlertToAdmin">Value indicating whether to send alert to admin or not.</param>
+        /// <param name="recipients">List of recipients delimited by comma.</param>
+        /// <param name="alertLocationThreshold">Threshold value.</param>
+        /// <param name="alertFailureTimeWindow"><see cref="TestAlertFailureTimeWindow"/> value.</param>
+        /// <param name="isEnabled">Value indicating whether to enable alert or not.</param>
+        /// <param name="statusCode"><see cref="HttpStatusCode"/> value.</param>
+        /// <param name="location">Resouce location.</param>
+        [Theory]
+        [InlineData("WEBTEST_NAME", true, "abc@email.com,xyz@email.com", 3, TestAlertFailureTimeWindow._5Minutes, true, HttpStatusCode.BadRequest, "East US")]
+        public void Given_InvalidHttpStatusCode_CreateOrUpdateAlertsAsync_ShouldThrow_Exception(string name, bool sendAlertToAdmin, string recipients, int alertLocationThreshold, TestAlertFailureTimeWindow alertFailureTimeWindow, bool isEnabled, HttpStatusCode statusCode, string location)
+        {
+            var emails = recipients.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            var alerts = new Mock<AlertsElement>();
+            alerts.SetupGet(p => p.SendAlertToAdmin).Returns(sendAlertToAdmin);
+            alerts.SetupGet(p => p.Recipients).Returns(emails);
+            alerts.SetupGet(p => p.AlertLocationThreshold).Returns(alertLocationThreshold);
+            alerts.SetupGet(p => p.TestAlertFailureTimeWindow).Returns(alertFailureTimeWindow);
+            alerts.SetupGet(p => p.IsEnabled).Returns(isEnabled);
+
+            this._webTest.SetupGet(p => p.Alerts).Returns(alerts.Object);
+
+            var response = new AzureOperationResponse() { StatusCode = statusCode };
+            this._alertOperations.Setup(p => p.CreateOrUpdateRuleAsync(It.IsAny<string>(), It.IsAny<RuleCreateOrUpdateParameters>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            this._insightsClient.Setup(p => p.AlertOperations).Returns(this._alertOperations.Object);
+
+            var webTestId = Guid.NewGuid();
+            var insightsId = Guid.NewGuid();
+            var webTestResource = new ResourceBaseExtended(location) { Id = webTestId.ToString(), Name = name };
+            var insightsResource = new ResourceBaseExtended(location) { Id = insightsId.ToString(), Name = name };
+
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(name, this._webTest.Object, this._insightsClient.Object, webTestResource, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<HttpResponseException>().And.Response.StatusCode.Should().Be(statusCode);
+        }
+
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="sendAlertToAdmin">Value indicating whether to send alert to admin or not.</param>
+        /// <param name="recipients">List of recipients delimited by comma.</param>
+        /// <param name="alertLocationThreshold">Threshold value.</param>
+        /// <param name="alertFailureTimeWindow"><see cref="TestAlertFailureTimeWindow"/> value.</param>
+        /// <param name="isEnabled">Value indicating whether to enable alert or not.</param>
+        /// <param name="location">Resouce location.</param>
+        [Theory]
+        [InlineData("WEBTEST_NAME", true, "abc@email.com,xyz@email.com", 3, TestAlertFailureTimeWindow._5Minutes, true, "East US")]
+        public async void Given_Parameters_CreateOrUpdateAlertsAsync_ShouldReturn_Result(string name, bool sendAlertToAdmin, string recipients, int alertLocationThreshold, TestAlertFailureTimeWindow alertFailureTimeWindow, bool isEnabled, string location)
+        {
+            var emails = recipients.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            var alerts = new Mock<AlertsElement>();
+            alerts.SetupGet(p => p.SendAlertToAdmin).Returns(sendAlertToAdmin);
+            alerts.SetupGet(p => p.Recipients).Returns(emails);
+            alerts.SetupGet(p => p.AlertLocationThreshold).Returns(alertLocationThreshold);
+            alerts.SetupGet(p => p.TestAlertFailureTimeWindow).Returns(alertFailureTimeWindow);
+            alerts.SetupGet(p => p.IsEnabled).Returns(isEnabled);
+
+            this._webTest.SetupGet(p => p.Alerts).Returns(alerts.Object);
+
+            var response = new AzureOperationResponse() { StatusCode = HttpStatusCode.OK };
+            this._alertOperations.Setup(p => p.CreateOrUpdateRuleAsync(It.IsAny<string>(), It.IsAny<RuleCreateOrUpdateParameters>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            this._insightsClient.Setup(p => p.AlertOperations).Returns(this._alertOperations.Object);
+
+            var webTestId = Guid.NewGuid();
+            var insightsId = Guid.NewGuid();
+            var webTestResource = new ResourceBaseExtended(location) { Id = webTestId.ToString(), Name = name };
+            var insightsResource = new ResourceBaseExtended(location) { Id = insightsId.ToString(), Name = name };
+
+            var result = await this._service.CreateOrUpdateAlertsAsync(name, this._webTest.Object, this._insightsClient.Object, webTestResource, insightsResource).ConfigureAwait(false);
+            result.Should().BeTrue();
         }
     }
 }

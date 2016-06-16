@@ -1,10 +1,7 @@
 ﻿using System;
 
 using Aliencube.AdalWrapper;
-using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
-
-using Castle.Core.Resource;
 
 using Microsoft.Azure.Management.Insights;
 using Microsoft.Azure.Management.Resources;
@@ -43,6 +40,8 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
             this.AuthenticationContext = new Mock<IAuthenticationContextWrapper>();
 
             this.ResourceOperations = new Mock<IResourceOperations>();
+
+            this.AlertOperations = new Mock<IAlertOperations>();
 
             this.ResourceManagementClient = new Mock<IResourceManagementClient>();
 
@@ -90,6 +89,11 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
         /// Gets the <see cref="Mock{IResourceOperations}"/> instance.
         /// </summary>
         public Mock<IResourceOperations> ResourceOperations { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IAlertOperations}"/> instance.
+        /// </summary>
+        public Mock<IAlertOperations> AlertOperations { get; }
 
         /// <summary>
         /// Gets the <see cref="Mock{IResourceManagementClient}"/> instance.
