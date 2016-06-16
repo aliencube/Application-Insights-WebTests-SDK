@@ -97,7 +97,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         private void Initialise()
         {
             this._syntheticMonitorId = $"{this._name}-{this._insights.Name}";
-            this.ResourceIdentity = new ResourceIdentity($"{this._syntheticMonitorId}-webtest", ResourceType, ApiVersion);
+            this.ResourceIdentity = new ResourceIdentity($"{this._syntheticMonitorId}", ResourceType, ApiVersion);
 
             this.Location = this._insights.Location;
             this.Tags.Add($"hidden-link:{this._insights.Id}", "Resource");

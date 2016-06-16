@@ -86,7 +86,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Extensions
                 throw new ArgumentNullException(nameof(insights));
             }
 
-            var alertName = $"{name}-{insights.Name}-alert";
+            var alertName = $"{name}-{insights.Name}".ToLowerInvariant();
 
             var action = new RuleEmailAction() { SendToServiceOwners = element.Alerts.SendAlertToAdmin };
             if (!element.Alerts.Recipients.IsNullOrEmpty())
