@@ -48,11 +48,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <summary>
         /// Creates or updates alert resource.
         /// </summary>
+        /// <param name="name">Name of the web test.</param>
         /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
         /// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
         /// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
         /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
         /// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
-        Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource);
+        Task<bool> CreateOrUpdateAlertsAsync(string name, WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource);
     }
 }

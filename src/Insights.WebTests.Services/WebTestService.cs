@@ -8,6 +8,7 @@ using System.Web.Http;
 using Aliencube.AdalWrapper;
 using Aliencube.Azure.Insights.WebTests.Models;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
+using Aliencube.Azure.Insights.WebTests.Services.Extensions;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
 
 using Microsoft.Azure;
@@ -26,6 +27,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services
     {
         private const string InsightsResourceType = "microsoft.insights/components";
         private const string InsightsApiVersion = "2015-05-01";
+        private const string InsightsAlertResourceLocation = "East US";
 
         private readonly AuthenticationElement _auth;
         private readonly ApplicationInsightsElement _appInsights;
@@ -183,13 +185,19 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <summary>
         /// Creates or updates alert resource.
         /// </summary>
+        /// <param name="name">Name of the web test.</param>
         /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
         /// <param name="client"><see cref="IInsightsManagementClient"/> instance.</param>
         /// <param name="webTestResource"><see cref="ResourceBaseExtended"/> instance as a Web Test resource.</param>
         /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
         /// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
-        public async Task<bool> CreateOrUpdateAlertsAsync(WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource)
+        public async Task<bool> CreateOrUpdateAlertsAsync(string name, WebTestElement webTest, IInsightsManagementClient client, ResourceBaseExtended webTestResource, ResourceBaseExtended insightsResource)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
             if (webTest == null)
             {
                 throw new ArgumentNullException(nameof(webTest));
@@ -210,42 +218,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(insightsResource));
             }
 
-            var name = "name";
-            var alertName = $"{name}-alert";
-
-            var ruleEmailAction = new RuleEmailAction() { SendToServiceOwners = webTest.Alerts.SendAlertToAdmin };
-            if (webTest.Alerts.Recipients != null && webTest.Alerts.Recipients.Any())
-            {
-                ruleEmailAction.CustomEmails = webTest.Alerts.Recipients;
-            }
-
-            var parameters = new RuleCreateOrUpdateParameters
-            {
-                Tags =
-                                         {
-                                             { $"hidden-link:{insightsResource.Id}", "Resource" },
-                                             { $"hidden-link:{webTestResource.Id}", "Resource" }
-                                         },
-                Location = "East US",
-                Properties = new Rule()
-                {
-                    Name = alertName,
-                    Description = string.Empty,
-                    IsEnabled = webTest.Alerts.IsEnabled,
-                    LastUpdatedTime = DateTime.UtcNow,
-                    Actions = { ruleEmailAction },
-                    Condition = new LocationThresholdRuleCondition
-                    {
-                        DataSource = new RuleMetricDataSource
-                        {
-                            MetricName = "GSMT_AvRaW",
-                            ResourceUri = webTestResource.Id
-                        },
-                        FailedLocationCount = webTest.Alerts.AlertLocationThreshold,
-                        WindowSize = TimeSpan.FromMinutes((int)webTest.Alerts.TestAlertFailureTimeWindow)
-                    },
-                },
-            };
+            var parameters = (new RuleCreateOrUpdateParameters() { Location = InsightsAlertResourceLocation })
+                                 .AddTags(webTestResource, insightsResource)
+                                 .AddProperties(name, webTest, webTestResource, insightsResource);
 
             var result = await client.AlertOperations.CreateOrUpdateRuleAsync(this._appInsights.ResourceGroup, parameters).ConfigureAwait(false);
             if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)

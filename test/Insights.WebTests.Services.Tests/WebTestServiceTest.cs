@@ -346,24 +346,28 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         /// <summary>
         /// Tests whether the method should throw an exception or not.
         /// </summary>
+        /// <param name="name">Web test name.</param>
         /// <param name="location">Resource location.</param>
         [Theory]
-        [InlineData("Central US")]
-        public void Given_NullParameters_CreateOrUpdateAlertsAsync_ShouldThrow_Exception(string location)
+        [InlineData("WEBTEST_NAME", "Central US")]
+        public void Given_NullParameters_CreateOrUpdateAlertsAsync_ShouldThrow_Exception(string name, string location)
         {
             var webTestResource = new ResourceBaseExtended(location);
             var insightsResource = new ResourceBaseExtended(location);
 
-            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(null, this._insightsClient.Object, webTestResource, insightsResource).ConfigureAwait(false); };
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(null, this._webTest.Object, this._insightsClient.Object, webTestResource, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
-            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(this._webTest.Object, null, webTestResource, insightsResource).ConfigureAwait(false); };
+            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(name, null, this._insightsClient.Object, webTestResource, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
-            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(this._webTest.Object, this._insightsClient.Object, null, insightsResource).ConfigureAwait(false); };
+            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(name, this._webTest.Object, null, webTestResource, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
-            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(this._webTest.Object, this._insightsClient.Object, webTestResource, null).ConfigureAwait(false); };
+            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(name, this._webTest.Object, this._insightsClient.Object, null, insightsResource).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.CreateOrUpdateAlertsAsync(name, this._webTest.Object, this._insightsClient.Object, webTestResource, null).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
         }
     }
