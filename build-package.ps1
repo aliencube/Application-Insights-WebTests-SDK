@@ -3,15 +3,15 @@ Param(
 	[string] [Parameter(Mandatory=$false)] $BuildPath
 )
 
-$nuget = ".\tools\nuget.exe"
+$nuget = ".\tools\NuGet.exe"
 $projects = Get-ChildItem .\src | ?{ $_.PSIsContainer }
 foreach($project in $projects)
 {
 	$projectPath = $project.FullName;
 	$projectName = $project.Name;
 	
-	$nuspec = $projectName.nuspec
-	$isPackage = Test-Path -Path Join-Path($projectPath, $nuspec)
+	$nuspec = "$projectName.nuspec"
+	$isPackage = Test-Path -Path $(Join-Path $projectPath $nuspec)
 	if ($isPackage -ne $true)
 	{
 		continue
@@ -19,10 +19,10 @@ foreach($project in $projects)
 
 	if ([string]::IsNullOrWhiteSpace($BuildPath))
 	{
-		& $nuget pack $projectPath\$nuspec -Version $Version
+		& $nuget pack $(Join-Path $projectPath $nuspec) -Version $Version
 	}
 	else
 	{
-		& $nuget pack $projectPath\$nuspec -OutputDirectory $buildPath -Version $Version
+		& $nuget pack $(Join-Path $projectPath $nuspec) -OutputDirectory $buildPath -Version $Version
 	}
 }
