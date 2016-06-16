@@ -70,6 +70,16 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns <c>True</c>; if processed successfully; otherwise returns <c>False</c>.</returns>
         public async Task<bool> ProcessAsync(string name, string url)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
             var credentials = await this.GetCredentialsAsync().ConfigureAwait(false);
 
             this._resourceManagementClient = new ResourceManagementClient(credentials);

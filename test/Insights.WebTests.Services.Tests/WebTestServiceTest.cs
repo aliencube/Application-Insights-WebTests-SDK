@@ -451,5 +451,21 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             var result = await this._service.CreateOrUpdateAlertsAsync(name, this._webTest.Object, this._insightsClient.Object, webTestResource, insightsResource).ConfigureAwait(false);
             result.Should().BeTrue();
         }
+
+        /// <summary>
+        /// Tests whether the method should throw an exception or not.
+        /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="url">Web test URL.</param>
+        [Theory]
+        [InlineData("WEBTEST_NAME", "http://localhost")]
+        public void Given_NullParameter_ProcessAsync_ShouldThrow_Exception(string name, string url)
+        {
+            Func<Task> func = async () => { var result = await this._service.ProcessAsync(null, url).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+
+            func = async () => { var result = await this._service.ProcessAsync(name, null).ConfigureAwait(false); };
+            func.ShouldThrow<ArgumentNullException>();
+        }
     }
 }
