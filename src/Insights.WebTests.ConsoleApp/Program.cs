@@ -1,4 +1,6 @@
-﻿using Aliencube.AdalWrapper;
+﻿using System;
+
+using Aliencube.AdalWrapper;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
@@ -22,7 +24,42 @@ namespace Aliencube.Azure.Insights.WebTests.ConsoleApp
             using (var context = new AuthenticationContextWrapper($"{settings.Authentication.AadInstanceUrl.TrimEnd('/')}/{settings.Authentication.TenantName}.onmicrosoft.com", false))
             using (var service = new WebTestService(settings, context))
             {
-                var processed = service.ProcessAsync(options).Result;
+                try
+                {
+                    var processed = service.ProcessAsync(options).Result;
+                }
+                catch (AggregateException ex)
+                {
+                    foreach (var e in ex.InnerExceptions)
+                    {
+                        Console.WriteLine($"--- Exception #{ex.InnerExceptions.IndexOf(e) + 1} ---");
+                        LogErrorToConsole(e);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogErrorToConsole(ex);
+                }
+            }
+#if DEBUG
+            Console.ReadLine();
+#endif
+        }
+
+        private static void LogErrorToConsole(Exception ex)
+        {
+            while (true)
+            {
+                Console.WriteLine(ex.Message);
+#if DEBUG
+                Console.WriteLine(ex.StackTrace);
+#endif
+                if (ex.InnerException == null)
+                {
+                    break;
+                }
+
+                ex = ex.InnerException;
             }
         }
     }
