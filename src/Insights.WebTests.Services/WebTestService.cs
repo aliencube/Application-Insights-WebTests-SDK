@@ -65,8 +65,10 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <summary>
         /// Processes creating web test resources.
         /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="url">Web test URL.</param>
         /// <returns>Returns <c>True</c>; if processed successfully; otherwise returns <c>False</c>.</returns>
-        public async Task<bool> ProcessAsync()
+        public async Task<bool> ProcessAsync(string name, string url)
         {
             var credentials = await this.GetCredentialsAsync().ConfigureAwait(false);
 
@@ -75,12 +77,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services
 
             var insightsResource = await this.GetInsightsResourceAsync(this._resourceManagementClient).ConfigureAwait(false);
 
-            //foreach (var webTest in this._webTests.OfType<WebTestElement>())
-            //{
-            //    var webTestResource = await this.CreateOrUpdateWebTestAsync(webTest, this._resourceManagementClient, insightsResource).ConfigureAwait(false);
+            foreach (var webTest in this._webTests)
+            {
+                var webTestResource = await this.CreateOrUpdateWebTestAsync(name, url, webTest, this._resourceManagementClient, insightsResource).ConfigureAwait(false);
 
-            //    await this.CreateOrUpdateAlertsAsync(webTest, this._insightsManagementClient, webTestResource, insightsResource).ConfigureAwait(false);
-            //}
+                await this.CreateOrUpdateAlertsAsync(name, webTest, this._insightsManagementClient, webTestResource, insightsResource).ConfigureAwait(false);
+            }
 
             return true;
         }

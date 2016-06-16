@@ -18,8 +18,10 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <summary>
         /// Processes creating web test resources.
         /// </summary>
+        /// <param name="name">Web test name.</param>
+        /// <param name="url">Web test URL.</param>
         /// <returns>Returns <c>True</c>; if processed successfully; otherwise returns <c>False</c>.</returns>
-        Task<bool> ProcessAsync();
+        Task<bool> ProcessAsync(string name, string url);
 
         /// <summary>
         /// Gets the <see cref="SubscriptionCloudCredentials"/> instance as Azure subscription credentials.
