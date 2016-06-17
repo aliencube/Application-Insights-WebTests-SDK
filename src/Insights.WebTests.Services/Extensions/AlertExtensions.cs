@@ -1,11 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
 
-using Aliencube.Azure.Insights.WebTests.Models;
 using Aliencube.Azure.Insights.WebTests.Models.Extensions;
-using Aliencube.Azure.Insights.WebTests.Models.Serialisation;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
 
 using Microsoft.Azure;
@@ -86,7 +81,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Extensions
                 throw new ArgumentNullException(nameof(insights));
             }
 
-            var alertName = $"{name}-{insights.Name}".ToLowerInvariant();
+            var alertName = $"{name}-{insights.Name}-alert".ToLowerInvariant();
 
             var action = new RuleEmailAction() { SendToServiceOwners = element.Alerts.SendAlertToAdmin };
             if (!element.Alerts.Recipients.IsNullOrEmpty())

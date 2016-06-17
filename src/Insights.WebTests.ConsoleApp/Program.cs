@@ -18,6 +18,8 @@ namespace Aliencube.Azure.Insights.WebTests.ConsoleApp
         /// <param name="args">List of arguments.</param>
         public static void Main(string[] args)
         {
+            Console.WriteLine("Processing started ...");
+
             var options = CommandBuildOptions.Build(args);
 
             using (var settings = WebTestSettingsElement.CreateInstance())
@@ -41,7 +43,10 @@ namespace Aliencube.Azure.Insights.WebTests.ConsoleApp
                     LogErrorToConsole(ex);
                 }
             }
+
+            Console.WriteLine("Processing completed");
 #if DEBUG
+            Console.WriteLine("Press any key to complete the process");
             Console.ReadLine();
 #endif
         }

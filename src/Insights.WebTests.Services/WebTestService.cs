@@ -122,18 +122,22 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns the <see cref="SubscriptionCloudCredentials"/> instance as Azure subscription credentials.</returns>
         public async Task<SubscriptionCloudCredentials> GetCredentialsAsync()
         {
+            Console.WriteLine("Acquiring credentials ...");
+
             IAuthenticationResultWrapper result;
             if (this._auth.UseServicePrinciple)
             {
                 var cc = new ClientCredential(this._auth.ClientId, this._auth.ClientSecret);
                 result = await this._authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", cc).ConfigureAwait(false);
 
+                Console.WriteLine("Credentials acquired");
                 return new TokenCloudCredentials(this._appInsights.SubscriptionId, result.AccessToken);
             }
 
             var uc = new UserPasswordCredential(this._auth.Username, this._auth.Password);
             result = await this._authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", this._auth.ClientId, uc).ConfigureAwait(false);
 
+            Console.WriteLine("Credentials acquired");
             return new TokenCloudCredentials(this._appInsights.SubscriptionId, result.AccessToken);
         }
 
@@ -149,14 +153,17 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(client));
             }
 
+            Console.WriteLine("Retrieving Application Insights details ...");
+
             var identity = new ResourceIdentity(this._appInsights.Name, InsightsResourceType, InsightsApiVersion);
             var result = await client.Resources.GetAsync(this._appInsights.ResourceGroup, identity).ConfigureAwait(false);
-            if (result.StatusCode == HttpStatusCode.OK)
+            if (!IsAcceptableHttpStatusCode(result.StatusCode, new[] { HttpStatusCode.OK }))
             {
-                return result.Resource;
+                throw new HttpResponseException(result.StatusCode);
             }
 
-            throw new HttpResponseException(result.StatusCode);
+            Console.WriteLine("Application Insights details retrieved");
+            return result.Resource;
         }
 
         /// <summary>
@@ -201,16 +208,19 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(insightsResource));
             }
 
+            Console.WriteLine($"Processing web test for {name} started ...");
+
             var resource = new WebTestResource(name, url, insightsResource, webTest.TestType);
             resource.CreateWebTestProperties(webTest.TestLocations, webTest.Status, webTest.Frequency, webTest.SuccessCriteria.Timeout, webTest.ParseDependentRequests, webTest.RetriesForWebTestFailure);
 
             var result = await client.Resources.CreateOrUpdateAsync(this._appInsights.ResourceGroup, resource.ResourceIdentity, resource).ConfigureAwait(false);
-            if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
+            if (!IsAcceptableHttpStatusCode(result.StatusCode, new[] { HttpStatusCode.OK, HttpStatusCode.Created }))
             {
-                return result.Resource;
+                throw new HttpResponseException(result.StatusCode);
             }
 
-            throw new HttpResponseException(result.StatusCode);
+            Console.WriteLine($"Processing web test for {name} completed");
+            return result.Resource;
         }
 
         /// <summary>
@@ -249,17 +259,20 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(insightsResource));
             }
 
+            Console.WriteLine($"Processing alert for {name} started ...");
+
             var parameters = (new RuleCreateOrUpdateParameters() { Location = InsightsAlertResourceLocation })
                                  .AddTags(webTestResource, insightsResource)
                                  .AddProperties(name, webTest, webTestResource, insightsResource);
 
             var result = await client.AlertOperations.CreateOrUpdateRuleAsync(this._appInsights.ResourceGroup, parameters).ConfigureAwait(false);
-            if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
+            if (!IsAcceptableHttpStatusCode(result.StatusCode, new[] { HttpStatusCode.OK, HttpStatusCode.Created }))
             {
-                return true;
+                throw new HttpResponseException(result.StatusCode);
             }
 
-            throw new HttpResponseException(result.StatusCode);
+            Console.WriteLine($"Processing alert for {name} completed");
+            return true;
         }
 
         /// <summary>
@@ -276,6 +289,12 @@ namespace Aliencube.Azure.Insights.WebTests.Services
             this._insightsManagementClient?.Dispose();
 
             this._disposed = true;
+        }
+
+        private static bool IsAcceptableHttpStatusCode(HttpStatusCode statusCode, IEnumerable<HttpStatusCode> acceptableStatusCodes)
+        {
+            var result = acceptableStatusCodes.Any(p => p == statusCode);
+            return result;
         }
     }
 }
