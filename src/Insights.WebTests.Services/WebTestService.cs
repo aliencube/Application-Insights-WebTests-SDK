@@ -122,7 +122,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// <returns>Returns the <see cref="SubscriptionCloudCredentials"/> instance as Azure subscription credentials.</returns>
         public async Task<SubscriptionCloudCredentials> GetCredentialsAsync()
         {
+#if !TEST
             Console.WriteLine("Acquiring credentials ...");
+#endif
 
             IAuthenticationResultWrapper result;
             if (this._auth.UseServicePrinciple)
@@ -130,14 +132,18 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 var cc = new ClientCredential(this._auth.ClientId, this._auth.ClientSecret);
                 result = await this._authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", cc).ConfigureAwait(false);
 
+#if !TEST
                 Console.WriteLine("Credentials acquired");
+#endif
                 return new TokenCloudCredentials(this._appInsights.SubscriptionId, result.AccessToken);
             }
 
             var uc = new UserPasswordCredential(this._auth.Username, this._auth.Password);
             result = await this._authenticationContext.AcquireTokenAsync($"{this._auth.ManagementInstanceUrl.TrimEnd('/')}/", this._auth.ClientId, uc).ConfigureAwait(false);
 
+#if !TEST
             Console.WriteLine("Credentials acquired");
+#endif
             return new TokenCloudCredentials(this._appInsights.SubscriptionId, result.AccessToken);
         }
 
@@ -153,8 +159,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(client));
             }
 
+#if !TEST
             Console.WriteLine("Retrieving Application Insights details ...");
-
+#endif
             var identity = new ResourceIdentity(this._appInsights.Name, InsightsResourceType, InsightsApiVersion);
             var result = await client.Resources.GetAsync(this._appInsights.ResourceGroup, identity).ConfigureAwait(false);
             if (!IsAcceptableHttpStatusCode(result.StatusCode, new[] { HttpStatusCode.OK }))
@@ -162,7 +169,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new HttpResponseException(result.StatusCode);
             }
 
+#if !TEST
             Console.WriteLine("Application Insights details retrieved");
+#endif
             return result.Resource;
         }
 
@@ -208,8 +217,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(insightsResource));
             }
 
+#if !TEST
             Console.WriteLine($"Processing web test for {name} started ...");
-
+#endif
             var resource = new WebTestResource(name, url, insightsResource, webTest.TestType);
             resource.CreateWebTestProperties(webTest.TestLocations, webTest.Status, webTest.Frequency, webTest.SuccessCriteria.Timeout, webTest.ParseDependentRequests, webTest.RetriesForWebTestFailure);
 
@@ -219,7 +229,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new HttpResponseException(result.StatusCode);
             }
 
+#if !TEST
             Console.WriteLine($"Processing web test for {name} completed");
+#endif
             return result.Resource;
         }
 
@@ -259,8 +271,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(insightsResource));
             }
 
+#if !TEST
             Console.WriteLine($"Processing alert for {name} started ...");
-
+#endif
             var parameters = (new RuleCreateOrUpdateParameters() { Location = InsightsAlertResourceLocation })
                                  .AddTags(webTestResource, insightsResource)
                                  .AddProperties(name, webTest, webTestResource, insightsResource);
@@ -271,7 +284,9 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new HttpResponseException(result.StatusCode);
             }
 
+#if !TEST
             Console.WriteLine($"Processing alert for {name} completed");
+#endif
             return true;
         }
 
