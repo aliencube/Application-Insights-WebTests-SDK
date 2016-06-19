@@ -13,10 +13,10 @@
   platform: Any CPU
   build_script:
   - cmd: tools\nuget restore Azure.Insights.WebTests.Sdk.sln
-  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Debug;TargetFrameworkVersion=v4.5;DefineConstants="DEBUG;TRACE";OutPutPath=bin\Debug\net45
+  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Debug;TargetFrameworkVersion=v4.5;DefineConstants="DEBUG;TRACE;TEST";OutPutPath=bin\Debug\net45
   test_script:
   - cmd: tools\nuget restore Azure.Insights.WebTests.Sdk.sln
-  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Debug;TargetFrameworkVersion=v4.5;DefineConstants="DEBUG;TRACE";OutPutPath=bin\Debug\net45
+  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Debug;TargetFrameworkVersion=v4.5;DefineConstants="DEBUG;TRACE;TEST";OutPutPath=bin\Debug\net45
   - ps: .\run-tests.ps1 -Configuration Debug
 
 # for release/all branch
@@ -42,12 +42,13 @@
       secure: 3tp7rCl4cvk/WDYBaeodIlmalNiYVWQYxE1wmVU7aMbkMKP0WtlMjjOU2yhX0D4n
   build_script:
   - cmd: tools\nuget restore Azure.Insights.WebTests.Sdk.sln
-  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE";OutPutPath=bin\Release\net45\
+  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE;TEST";OutPutPath=bin\Release\net45\
   test_script:
   - cmd: tools\nuget restore Azure.Insights.WebTests.Sdk.sln
-  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE";OutPutPath=bin\Release\net45\
+  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE;TEST";OutPutPath=bin\Release\net45\
   - ps: .\run-tests.ps1 -Configuration Release
   after_test:
+  - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE";OutPutPath=bin\Release\net45\
   - ps: .\build-package.ps1 -Version %APPVEYOR_BUILD_VERSION%
   artifacts:
   - path: '**\Aliencube.Azure.Insights.WebTests.Services.*.nupkg'
