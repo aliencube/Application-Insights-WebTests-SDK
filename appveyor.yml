@@ -49,15 +49,15 @@
   - ps: .\run-tests.ps1 -Configuration Release
   after_test:
   - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE";OutPutPath=bin\Release\net45\
-  - ps: .\build-package.ps1 -Version %APPVEYOR_BUILD_VERSION%
+  - ps: .\build-package.ps1 -Version "$env:APPVEYOR_BUILD_VERSION"
   artifacts:
-  - path: '**\Aliencube.Azure.Insights.WebTests.Services.*.nupkg'
-    name: Insights.WebTests.Services
+  - path: '**\Aliencube.Azure.Insights.WebTests.SDK.*.nupkg'
+    name: Aliencube.Azure.Insights.WebTests.SDK
   deploy:
   - provider: NuGet
     api_key:
       secure: ZdI7BA2YRQg/yRMPbRGTTJeGWj3X3o8kNhf4LeA5YkV072GpmKwQ3aW+KVgMbkZX
-    artifact: Insights.WebTests.Services
+    artifact: Aliencube.Azure.Insights.WebTests.SDK
     on:
       branch: release/all
       platform: Any CPU
