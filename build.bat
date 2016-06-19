@@ -21,8 +21,8 @@ del "build\*.nupkg"
 REM "tools\nuget.exe" setApiKey %1
 
 ::PACK
-"tools\nuget.exe" pack "src\Insights.WebTests.Models\Insights.WebTests.Models.nuspec" -OutputDirectory build -Version 1.0.0.0
-"tools\nuget.exe" pack "src\Insights.WebTests.Services\Insights.WebTests.Services.nuspec" -OutputDirectory build -Version 1.0.0.0
+REM "tools\nuget.exe" pack "src\Insights.WebTests.Models\Insights.WebTests.Models.nuspec" -OutputDirectory build -Version 1.0.0.0
+"tools\nuget.exe" pack "src\Insights.WebTests.Services\Insights.WebTests.Services.nuspec" -OutputDirectory build -Version 1.0.0.0-preview
 
 ::DEPLOY
 REM "tools\nuget.exe" push "build\*.nupkg"

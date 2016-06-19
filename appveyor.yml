@@ -21,7 +21,7 @@
 
 # for release/all branch
 -
-  version: 1.0.0.{build}-preview
+  version: 1.0.0.{build}
   pull_requests:
     do_not_increment_build_number: true
   branches:
@@ -49,7 +49,7 @@
   - ps: .\run-tests.ps1 -Configuration Release
   after_test:
   - cmd: msbuild Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE";OutPutPath=bin\Release\net45\
-  - ps: .\build-package.ps1 -Version $env:APPVEYOR_BUILD_VERSION
+  - ps: .\build-package.ps1 -Version "$env:APPVEYOR_BUILD_VERSION-preview"
   artifacts:
   - path: '**\Aliencube.Azure.Insights.WebTests.Services.*.nupkg'
     name: Insights.WebTests.Services
