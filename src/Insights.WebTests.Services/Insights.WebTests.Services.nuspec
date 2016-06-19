@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Aliencube.Azure.Insights.WebTests.SDK</id>
+    <version>$version$</version>
+    <title>Application Insights WebTests SDK</title>
+    <authors>Aliencube Community</authors>
+    <owners>justinyoo</owners>
+    <licenseUrl>https://github.com/aliencube/Application-Insights-WebTests-SDK/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/aliencube/Application-Insights-WebTests-SDK</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <summary>
+      This provides an extended SDK for WebTests of Application Insights, which is not supported by [Azure SDK for .NET](https://github.com/Azure/azure-sdk-for-net).
+    </summary>
+    <description>
+      <![CDATA[
+        This provides an extended SDK for WebTests of Application Insights, which is not supported by [Azure SDK for .NET](https://github.com/Azure/azure-sdk-for-net).
+      ]]>
+    </description>
+    <copyright>Aliencube Community. All rights reserved.</copyright>
+    <tags>Aliencube, ApplicationInsights, Azure, WebTests, Alerts, .NET</tags>
+    <dependencies>
+      <dependency id="Aliencube.AdalWrapper" version="1.0.0.5" />
+      <dependency id="Aliencube.ConfigurationValueConverter" version="1.0.0.4" />
+      <dependency id="CommandLineParser" version="1.9.71" />
+      <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
+      <dependency id="Microsoft.Azure.Insights" version="0.11.0-preview" />
+      <dependency id="Microsoft.Azure.Management.Resources" version="2.20.0-preview" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\**\Aliencube.Azure.Insights.WebTests.*" target="lib" />
+  </files>
+</package>

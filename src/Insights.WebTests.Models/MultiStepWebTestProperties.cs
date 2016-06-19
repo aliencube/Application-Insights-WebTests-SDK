@@ -5,6 +5,8 @@
     /// </summary>
     public class MultiStepWebTestProperties : WebTestProperties
     {
+        public override string Kind => null;
+
         /// <summary>
         /// Gets or sets the <see cref="MultiStepWebTestConfiguration"/> object.
         /// </summary>

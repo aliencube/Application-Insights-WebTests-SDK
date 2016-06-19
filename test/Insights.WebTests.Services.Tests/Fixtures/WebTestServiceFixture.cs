@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Linq;
 
 using Aliencube.AdalWrapper;
-using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
+
+using Microsoft.Azure.Management.Insights;
+using Microsoft.Azure.Management.Resources;
 
 using Moq;
 
@@ -25,6 +26,8 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
 
             this.ApplicationInsightsElement = new Mock<ApplicationInsightsElement>();
 
+            this.WebTestElement = new Mock<WebTestElement>();
+
             this.WebTestElementCollection = new WebTestElementCollection();
 
             this.WebTestSettingsElement = new Mock<IWebTestSettingsElement>();
@@ -35,6 +38,14 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
             this.AuthenticationResult = new Mock<IAuthenticationResultWrapper>();
 
             this.AuthenticationContext = new Mock<IAuthenticationContextWrapper>();
+
+            this.ResourceOperations = new Mock<IResourceOperations>();
+
+            this.AlertOperations = new Mock<IAlertOperations>();
+
+            this.ResourceManagementClient = new Mock<IResourceManagementClient>();
+
+            this.InsightsManagementClient = new Mock<IInsightsManagementClient>();
 
             this.WebTestService = new WebTestService(this.WebTestSettingsElement.Object, this.AuthenticationContext.Object);
         }
@@ -48,6 +59,11 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
         /// Gets the <see cref="Mock{ApplicationInsightsElement}"/> instance.
         /// </summary>
         public Mock<ApplicationInsightsElement> ApplicationInsightsElement { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{WebTestElement}"/> instance.
+        /// </summary>
+        public Mock<WebTestElement> WebTestElement { get; }
 
         /// <summary>
         /// Gets the <see cref="Mock{WebTestElementCollection}"/> instance.
@@ -68,6 +84,26 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests.Fixtures
         /// Gets the <see cref="Mock{IAuthenticationContextWrapper}"/> instance.
         /// </summary>
         public Mock<IAuthenticationContextWrapper> AuthenticationContext { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IResourceOperations}"/> instance.
+        /// </summary>
+        public Mock<IResourceOperations> ResourceOperations { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IAlertOperations}"/> instance.
+        /// </summary>
+        public Mock<IAlertOperations> AlertOperations { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IResourceManagementClient}"/> instance.
+        /// </summary>
+        public Mock<IResourceManagementClient> ResourceManagementClient { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Mock{IInsightsManagementClient}"/> instance.
+        /// </summary>
+        public Mock<IInsightsManagementClient> InsightsManagementClient { get; }
 
         /// <summary>
         /// Gets the <see cref="IWebTestService"/> instance.

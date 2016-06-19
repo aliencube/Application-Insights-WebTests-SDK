@@ -5,7 +5,7 @@ using System.Configuration;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Options;
-using Aliencube.ConfigurationConverters;
+using Aliencube.ConfigurationValueConverter;
 
 namespace Aliencube.Azure.Insights.WebTests.Services.Settings
 {
@@ -28,9 +28,10 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         public WebTestElement(WebTestElement element)
         {
             this.TestType = element.TestType;
+            this.Status = element.Status;
+            this.WebTestFrequency = (int)element.Frequency;
             this.ParseDependentRequests = element.ParseDependentRequests;
             this.RetriesForWebTestFailure = element.RetriesForWebTestFailure;
-            this.WebTestFrequency = (int)element.TestFrequency;
             this.TestLocations = element.TestLocations;
             this.SuccessCriteria = element.SuccessCriteria.Clone();
             this.Alerts = element.Alerts.Clone();
@@ -45,6 +46,43 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         {
             get { return (TestType)this["testType"]; }
             set { this["testType"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the value indicating whether the the web test status is enabled or not.
+        /// </summary>
+        [ConfigurationProperty("status", IsRequired = true, DefaultValue = TestStatus.Enabled)]
+        [TypeConverter(typeof(CaseInsensitiveEnumConverter<TestStatus>))]
+        public virtual TestStatus Status
+        {
+            get { return (TestStatus)this["status"]; }
+            set { this["status"] = value; }
+        }
+
+        /// <summary>
+        /// Sets the test frequency in minutes.
+        /// </summary>
+        [ConfigurationProperty("frequency", IsRequired = true, DefaultValue = 5)]
+        public virtual int WebTestFrequency
+        {
+            private get { return (int)this["frequency"]; }
+            set { this["frequency"] = value; }
+        }
+
+        /// <summary>
+        /// Gets the test frequency in minutes converted from Web/App.config.
+        /// </summary>
+        public virtual TestFrequency Frequency
+        {
+            get
+            {
+                if (!Enum.IsDefined(typeof(TestFrequency), this.WebTestFrequency))
+                {
+                    throw new InvalidEnumValueException();
+                }
+
+                return (TestFrequency)Enum.ToObject(typeof(TestFrequency), this.WebTestFrequency);
+            }
         }
 
         /// <summary>
@@ -69,39 +107,13 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Settings
         }
 
         /// <summary>
-        /// Gets or sets the test frequency in minutes.
-        /// </summary>
-        [ConfigurationProperty("testFrequency", IsRequired = true, DefaultValue = 5)]
-        public virtual int WebTestFrequency
-        {
-            private get { return (int)this["testFrequency"]; }
-            set { this["testFrequency"] = value; }
-        }
-
-        /// <summary>
-        /// Gets the test frequency in minutes converted from Web/App.config.
-        /// </summary>
-        public virtual TestFrequency TestFrequency
-        {
-            get
-            {
-                if (!Enum.IsDefined(typeof(TestFrequency), this.WebTestFrequency))
-                {
-                    throw new InvalidEnumValueException();
-                }
-
-                return (TestFrequency)Enum.ToObject(typeof(TestFrequency), this.WebTestFrequency);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the list of test locations delimited by commas.
         /// </summary>
         [ConfigurationProperty("testLocations", IsRequired = true)]
-        [TypeConverter(typeof(CommaDelimitedListConverter<TestLocations>))]
-        public virtual List<TestLocations> TestLocations
+        [TypeConverter(typeof(PipeDelimitedFlaggedEnumConverter<TestLocations>))]
+        public virtual TestLocations TestLocations
         {
-            get { return (List<TestLocations>)this["testLocations"]; }
+            get { return (TestLocations)this["testLocations"]; }
             set { this["testLocations"] = value; }
         }
 

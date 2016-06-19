@@ -71,7 +71,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         /// <param name="testTimeout"><see cref="TestTimeout"/> value.</param>
         /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
         /// <param name="retriesForWebTestFailure"><see cref="RetriesForWebTestFailure"/> value.</param>
-        /// <param name="expectedHttpStatusCode">HTTP status code expected. Default value is <c>200</c></param>
+        /// <param name="expectedHttpStatusCode">HTTP status code expected. Default value is <c>200</c>.</param>
         /// <param name="text">Text to find in the validation rule.</param>
         public void CreateWebTestProperties(TestLocations testLocations, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, int expectedHttpStatusCode = 200, string text = null)
         {
@@ -97,7 +97,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         private void Initialise()
         {
             this._syntheticMonitorId = $"{this._name}-{this._insights.Name}";
-            this.ResourceIdentity = new ResourceIdentity(this._syntheticMonitorId, ResourceType, ApiVersion);
+            this.ResourceIdentity = new ResourceIdentity($"{this._syntheticMonitorId}", ResourceType, ApiVersion);
 
             this.Location = this._insights.Location;
             this.Tags.Add($"hidden-link:{this._insights.Id}", "Resource");
@@ -108,10 +108,10 @@ namespace Aliencube.Azure.Insights.WebTests.Models
             var properties = new PingWebTestProperties()
                                  {
                                      Name = this._name,
+                                     Description = string.Empty,
                                      TestStatus = testStatus,
                                      TestFrequency = testFrequency,
                                      TestTimeout = testTimeout,
-                                     Kind = TestKind.Ping,
                                      EnableRetriesForWebTestFailure = retriesForWebTestFailure,
                                      Locations = WebTestLocations.GetWebTestLocations(testLocations),
                                      Configuration = new PingWebTestConfiguration(this._name, this._url, (int)testTimeout, parseDependentRequests, expectedHttpStatusCode, text),

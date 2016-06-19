@@ -54,8 +54,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
                 throw new ArgumentOutOfRangeException(nameof(expectedHttpStatusCode));
             }
 
-            if (expectedHttpStatusCode != 0
-                && Enum.GetValues(typeof(HttpStatusCode)).Cast<int>().All(p => p != expectedHttpStatusCode))
+            if (expectedHttpStatusCode != 0 && !Enum.IsDefined(typeof(HttpStatusCode), expectedHttpStatusCode))
             {
                 throw new InvalidHttpStatusCodeException();
             }

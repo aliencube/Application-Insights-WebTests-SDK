@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Services.Settings;
