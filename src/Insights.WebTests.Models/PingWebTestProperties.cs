@@ -11,10 +11,5 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         /// Gets the web test kind.
         /// </summary>
         public override string Kind => TestKind.Ping;
-
-        /// <summary>
-        /// Gets or sets the <see cref="PingWebTestConfiguration"/> object.
-        /// </summary>
-        public override WebTestConfiguration Configuration { get; set; }
     }
 }

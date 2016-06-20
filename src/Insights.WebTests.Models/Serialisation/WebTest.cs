@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Xml.Serialization;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
+using Aliencube.Azure.Insights.WebTests.Models.Extensions;
 
 namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
 {
@@ -194,5 +194,23 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
         [XmlArray("ValidationRules", IsNullable = true)]
         [XmlArrayItem("ValidationRule", IsNullable = false)]
         public List<WebTestValidationRule> ValidationRules { get; }
+
+        /// <summary>
+        /// Returns a string which represents the object instance.
+        /// </summary>
+        /// <param name="webTest"><see cref="WebTest"/> instance.</param>
+        public static implicit operator string(WebTest webTest)
+        {
+            return webTest.ToString();
+        }
+
+        /// <summary>
+        /// Converts the current object instance to a string.
+        /// </summary>
+        /// <returns>Returns a string which represents the object instance.</returns>
+        public override string ToString()
+        {
+            return this.ToXml();
+        }
     }
 }

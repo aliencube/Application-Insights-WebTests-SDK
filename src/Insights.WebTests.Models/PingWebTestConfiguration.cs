@@ -2,7 +2,6 @@ using System;
 using System.Net;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
-using Aliencube.Azure.Insights.WebTests.Models.Extensions;
 using Aliencube.Azure.Insights.WebTests.Models.Serialisation;
 
 namespace Aliencube.Azure.Insights.WebTests.Models
@@ -56,6 +55,6 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         /// <summary>
         /// Gets the web test XML serialised value.
         /// </summary>
-        public override string WebTest => this._test.ToXml();
+        public override string WebTest => this._test;
     }
 }

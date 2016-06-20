@@ -89,7 +89,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         /// <summary>
         /// Gets or sets the <see cref="WebTestConfiguration"/> object.
         /// </summary>
-        public abstract WebTestConfiguration Configuration { get; set; }
+        public WebTestConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Gets or sets the monitor Id.
