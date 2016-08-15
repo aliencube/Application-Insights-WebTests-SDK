@@ -47,6 +47,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Tests
             instance.WebTest.Should().ContainEquivalentOf("<WebTest");
             instance.WebTest.Should().ContainEquivalentOf("<Items>");
             instance.WebTest.Should().ContainEquivalentOf("<Request");
+            instance.WebTest.Should().ContainEquivalentOf($"Url=\"{url}\"");
             instance.WebTest.Should().ContainEquivalentOf("<ValidationRules>");
             instance.WebTest.Should().ContainEquivalentOf("<RuleParameters");
         }

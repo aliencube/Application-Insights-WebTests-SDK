@@ -59,22 +59,10 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
                 throw new InvalidHttpStatusCodeException();
             }
 
-            this.Name = name;
-            this.Id = Guid.NewGuid();
-            this.Enabled = true;
-            this.CssProjectStructure = string.Empty;
-            this.CssIteration = string.Empty;
-            this.Timeout = timeout;
-            this.WorkItemIds = string.Empty;
-            this.Description = string.Empty;
-            this.CredentialUserName = string.Empty;
-            this.CredentialPassword = string.Empty;
-            this.PreAuthenticate = true;
-            this.Proxy = Default;
-            this.StopOnError = false;
-            this.RecordedResultFile = string.Empty;
-            this.ResultsLocale = string.Empty;
+            this.Initialise();
 
+            this.Name = name;
+            this.Timeout = timeout;
             this.Items = new List<WebTestItemRequest>()
                              {
                                  new WebTestItemRequest(url, timeout, parseDependentRequests, expectedHttpStatusCode),
@@ -92,108 +80,108 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
         }
 
         /// <summary>
-        /// Gets the web test name.
+        /// Gets or sets the web test name.
         /// </summary>
-        [XmlAttribute()]
-        public string Name { get; }
+        [XmlAttribute]
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets the Id as GUID format.
+        /// Gets or sets the Id as GUID format.
         /// </summary>
-        [XmlAttribute()]
-        public Guid Id { get; }
+        [XmlAttribute]
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets the value indicating whether the test is enabled or not. This is always <c>True</c>.
+        /// Gets or sets the value indicating whether the test is enabled or not. This is always <c>True</c>.
         /// </summary>
-        [XmlAttribute()]
-        public bool Enabled { get; }
+        [XmlAttribute]
+        public bool Enabled { get; set; }
 
         /// <summary>
-        /// Gets the CSS project structure. This is always <c>String.Empty</c>.
+        /// Gets or sets the CSS project structure. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string CssProjectStructure { get; }
+        [XmlAttribute]
+        public string CssProjectStructure { get; set; }
 
         /// <summary>
-        /// Gets the CSS iteration. This is always <c>String.Empty</c>.
+        /// Gets or sets the CSS iteration. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string CssIteration { get; }
+        [XmlAttribute]
+        public string CssIteration { get; set; }
 
         /// <summary>
-        /// Gets the timeout value in seconds.
+        /// Gets or sets the timeout value in seconds.
         /// </summary>
-        [XmlAttribute()]
-        public int Timeout { get; }
+        [XmlAttribute]
+        public int Timeout { get; set; }
 
         /// <summary>
-        /// Gets the list of work item Ids delimited by comma. This is always <c>String.Empty</c>.
+        /// Gets or sets the list of work item Ids delimited by comma. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string WorkItemIds { get; }
+        [XmlAttribute]
+        public string WorkItemIds { get; set; }
 
         /// <summary>
-        /// Gets the description. This is always <c>String.Empty</c>.
+        /// Gets or sets the description. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string Description { get; }
+        [XmlAttribute]
+        public string Description { get; set; }
 
         /// <summary>
-        /// Gets the credential username. This is always <c>String.Empty</c>.
+        /// Gets or sets the credential username. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string CredentialUserName { get; }
+        [XmlAttribute]
+        public string CredentialUserName { get; set; }
 
         /// <summary>
-        /// Gets the credential password. This is always <c>String.Empty</c>.
+        /// Gets or sets the credential password. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string CredentialPassword { get; }
+        [XmlAttribute]
+        public string CredentialPassword { get; set; }
 
         /// <summary>
-        /// Gets the value indicating whether the test is pre-authenticated or not.  This is always <c>True</c>.
+        /// Gets or sets the value indicating whether the test is pre-authenticated or not.  This is always <c>True</c>.
         /// </summary>
-        [XmlAttribute()]
-        public bool PreAuthenticate { get; }
+        [XmlAttribute]
+        public bool PreAuthenticate { get; set; }
 
         /// <summary>
-        /// Gets the proxy value. This is always <c>default</c>.
+        /// Gets or sets the proxy value. This is always <c>default</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string Proxy { get; }
+        [XmlAttribute]
+        public string Proxy { get; set; }
 
         /// <summary>
-        /// Gets the value indicating whether to stop on error or not. This is always <c>False</c>.
+        /// Gets or sets the value indicating whether to stop on error or not. This is always <c>False</c>.
         /// </summary>
-        [XmlAttribute()]
-        public bool StopOnError { get; }
+        [XmlAttribute]
+        public bool StopOnError { get; set; }
 
         /// <summary>
-        /// Gets the result filename to be recorded. This is always <c>String.Empty</c>.
+        /// Gets or sets the result filename to be recorded. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string RecordedResultFile { get; }
+        [XmlAttribute]
+        public string RecordedResultFile { get; set; }
 
         /// <summary>
-        /// Gets the result locale. This is always <c>String.Empty</c>.
+        /// Gets or sets the result locale. This is always <c>String.Empty</c>.
         /// </summary>
-        [XmlAttribute()]
-        public string ResultsLocale { get; }
+        [XmlAttribute]
+        public string ResultsLocale { get; set; }
 
         /// <summary>
-        /// Gets the list of the <see cref="WebTestItemRequest"/> objects.
+        /// Gets or sets the list of the <see cref="WebTestItemRequest"/> objects.
         /// </summary>
         [XmlArray("Items", IsNullable = false)]
         [XmlArrayItem("Request", IsNullable = false)]
-        public List<WebTestItemRequest> Items { get; }
+        public List<WebTestItemRequest> Items { get; set; }
 
         /// <summary>
-        /// Gets the list of the <see cref="WebTestValidationRule"/> objects.
+        /// Gets or sets the list of the <see cref="WebTestValidationRule"/> objects.
         /// </summary>
         [XmlArray("ValidationRules", IsNullable = true)]
         [XmlArrayItem("ValidationRule", IsNullable = false)]
-        public List<WebTestValidationRule> ValidationRules { get; }
+        public List<WebTestValidationRule> ValidationRules { get; set; }
 
         /// <summary>
         /// Returns a string which represents the object instance.
@@ -211,6 +199,23 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
         public override string ToString()
         {
             return this.ToXml();
+        }
+
+        private void Initialise()
+        {
+            this.Id = Guid.NewGuid();
+            this.Enabled = true;
+            this.CssProjectStructure = string.Empty;
+            this.CssIteration = string.Empty;
+            this.WorkItemIds = string.Empty;
+            this.Description = string.Empty;
+            this.CredentialUserName = string.Empty;
+            this.CredentialPassword = string.Empty;
+            this.PreAuthenticate = true;
+            this.Proxy = Default;
+            this.StopOnError = false;
+            this.RecordedResultFile = string.Empty;
+            this.ResultsLocale = string.Empty;
         }
     }
 }
