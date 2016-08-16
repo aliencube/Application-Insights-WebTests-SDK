@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Extensions;
@@ -31,6 +32,17 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Options
         /// </summary>
         [Option('t', "type", Required = false, DefaultValue = TestType.UrlPingTest, HelpText = "Web test type")]
         public TestType Type { get; set; }
+
+        [HelpOption]
+        public static string GetUsage()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("-n|--name\tNameof web test");
+            sb.AppendLine("-u|--url\tURL for web test");
+            sb.AppendLine("-t|--type\tType of web test. Default is UrlPingTest.");
+
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Builds the arguments to the <see cref="CommandBuildOptions"/> object.
