@@ -123,6 +123,7 @@
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="MultiStepWebTestConfiguration.cs" />
     <Compile Include="MultiStepWebTestProperties.cs" />
+    <Compile Include="Options\AuthType.cs" />
     <Compile Include="Options\CommandBuildOptions.cs" />
     <Compile Include="Options\TestAlertFailureTimeWindow.cs" />
     <Compile Include="PingWebTestConfiguration.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Options\TestLocations.cs" />
     <Compile Include="Options\TestTimeout.cs" />
     <Compile Include="Serialisation\WebTest.cs" />
+    <Compile Include="Serialisation\WebTestItemRequestHeader.cs" />
     <Compile Include="WebTestConfiguration.cs" />
     <Compile Include="Options\TestKind.cs" />
     <Compile Include="Extensions\WebTestExtensions.cs" />

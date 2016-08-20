@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
 using Aliencube.Azure.Insights.WebTests.Models.Extensions;
+using Aliencube.Azure.Insights.WebTests.Models.Options;
 
 namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
 {
@@ -31,8 +32,10 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
         /// <param name="timeout">Timeout value.</param>
         /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
         /// <param name="expectedHttpStatusCode">Expected HTTP status code. This SHOULD be <c>0</c>, if it's not required.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="text">Text to find in the validation rule.</param>
-        public WebTest(string name, string url, int timeout, bool parseDependentRequests, int expectedHttpStatusCode, string text = null)
+        public WebTest(string name, string url, int timeout, bool parseDependentRequests, int expectedHttpStatusCode, AuthType authType = AuthType.None, string accessToken = null, string text = null)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -65,7 +68,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
             this.Timeout = timeout;
             this.Items = new List<WebTestItemRequest>()
                              {
-                                 new WebTestItemRequest(url, timeout, parseDependentRequests, expectedHttpStatusCode),
+                                 new WebTestItemRequest(url, timeout, parseDependentRequests, expectedHttpStatusCode, authType, accessToken),
                              };
 
             if (string.IsNullOrWhiteSpace(text))

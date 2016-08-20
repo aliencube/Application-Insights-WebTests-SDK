@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Xml.Serialization;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
+using Aliencube.Azure.Insights.WebTests.Models.Options;
 
 namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
 {
@@ -29,7 +31,9 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
         /// <param name="timeout">Timeout value.</param>
         /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
         /// <param name="expectedHttpStatusCode">Expected HTTP status code. This SHOULD be <c>0</c>, if it's not required.</param>
-        public WebTestItemRequest(string url, int timeout, bool parseDependentRequests, int expectedHttpStatusCode)
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
+        public WebTestItemRequest(string url, int timeout, bool parseDependentRequests, int expectedHttpStatusCode, AuthType authType = AuthType.None, string accessToken = null)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -58,6 +62,13 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
             this.Timeout = timeout;
             this.ParseDependentRequests = parseDependentRequests;
             this.ExpectedHttpStatusCode = expectedHttpStatusCode;
+
+            if (string.IsNullOrWhiteSpace(accessToken))
+            {
+                return;
+            }
+
+            this.AddHeaders(authType, accessToken);
         }
 
         /// <summary>
@@ -156,6 +167,10 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
         [XmlAttribute()]
         public bool IgnoreHttpStatusCode { get; set; }
 
+        [XmlArray("Headers", IsNullable = true)]
+        [XmlArrayItem("Header", IsNullable = false)]
+        public List<WebTestItemRequestHeader> Headers { get; set; }
+
         private void Initialise()
         {
             this.Method = Get;
@@ -170,6 +185,16 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
             this.ExpectedResponseUrl = string.Empty;
             this.ReportingName = string.Empty;
             this.IgnoreHttpStatusCode = false;
+        }
+
+        private void AddHeaders(AuthType authType, string accessToken)
+        {
+            var header = new WebTestItemRequestHeader
+                         {
+                             Name = "Authorization",
+                             Value = authType == AuthType.None ? accessToken : $"{authType} {accessToken}"
+                         };
+            this.Headers = new List<WebTestItemRequestHeader>() { header };
         }
     }
 }

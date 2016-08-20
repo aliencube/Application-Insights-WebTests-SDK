@@ -212,29 +212,31 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         /// </summary>
         /// <param name="name">Web test name.</param>
         /// <param name="url">Web test URL.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="testType">Web test type.</param>
         /// <param name="location">Web test resource location.</param>
         [Theory]
-        [InlineData("WEBTEST_NAME", "http://localhost", TestType.UrlPingTest, "Central US")]
-        public void Given_NullParameters_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestType testType, string location)
+        [InlineData("WEBTEST_NAME", "http://localhost", AuthType.None, "abcdef", TestType.UrlPingTest, "Central US")]
+        public void Given_NullParameters_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, AuthType authType, string accessToken, TestType testType, string location)
         {
             this._webTest.SetupGet(p => p.TestType).Returns(testType);
 
             var insightsResource = new ResourceBaseExtended(location);
 
-            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(null, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(null, url, authType, accessToken, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
-            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, null, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, null, authType, accessToken, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
-            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, null, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, authType, accessToken, null, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
-            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, null, insightsResource).ConfigureAwait(false); };
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, authType, accessToken, this._webTest.Object, null, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
 
-            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, null).ConfigureAwait(false); };
+            func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, authType, accessToken, this._webTest.Object, this._resourceClient.Object, null).ConfigureAwait(false); };
             func.ShouldThrow<ArgumentNullException>();
         }
 
@@ -243,16 +245,18 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         /// </summary>
         /// <param name="name">Web test name.</param>
         /// <param name="url">Web test URL.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="testType">Web test type.</param>
         [Theory]
-        [InlineData("WEBTEST_NAME", "http://localhost", TestType.MultiStepTest)]
-        public void Given_InvalidTestType_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestType testType)
+        [InlineData("WEBTEST_NAME", "http://localhost", AuthType.None, "abcedf", TestType.MultiStepTest)]
+        public void Given_InvalidTestType_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, AuthType authType, string accessToken, TestType testType)
         {
             this._webTest.SetupGet(p => p.TestType).Returns(testType);
 
             var insightsResource = new ResourceBaseExtended();
 
-            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, authType, accessToken, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<InvalidOperationException>();
         }
 
@@ -269,9 +273,11 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         /// <param name="testLocations"><see cref="TestLocations"/> value.</param>
         /// <param name="resourceGroup">Resource group name.</param>
         /// <param name="statusCode"><see cref="HttpStatusCode"/> value.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         [Theory]
-        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", HttpStatusCode.BadRequest)]
-        public void Given_InvalidHttpStatusCode_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, TestLocations testLocations, string resourceGroup, HttpStatusCode statusCode)
+        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", HttpStatusCode.BadRequest, AuthType.None, "abcdef")]
+        public void Given_InvalidHttpStatusCode_CreateOrUpdateWebTestAsync_ShouldThrow_Exception(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, TestLocations testLocations, string resourceGroup, HttpStatusCode statusCode, AuthType authType, string accessToken)
         {
             var successCriteria = new Mock<SucessCriteriaElement>();
             successCriteria.SetupGet(p => p.Timeout).Returns(testTimeout);
@@ -296,7 +302,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             var id = Guid.NewGuid();
             var insightsResource = new ResourceBaseExtended() { Id = id.ToString(), Name = name };
 
-            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
+            Func<Task> func = async () => { var result = await this._service.CreateOrUpdateWebTestAsync(name, url, authType, accessToken, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false); };
             func.ShouldThrow<HttpResponseException>().And.Response.StatusCode.Should().Be(statusCode);
         }
 
@@ -310,12 +316,14 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
         /// <param name="testTimeout"><see cref="TestTimeout"/> value.</param>
         /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
         /// <param name="retriesForWebTestFailure">Value indicating whether to retry for web test failure or not.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="testLocations"><see cref="TestLocations"/> value.</param>
         /// <param name="resourceGroup">Resource group name.</param>
         /// <param name="location">Resouce location.</param>
         [Theory]
-        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", "Central US")]
-        public async void Given_Parameters_CreateOrUpdateWebTestAsync_ShouldReturn_Result(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, TestLocations testLocations, string resourceGroup, string location)
+        [InlineData("WEBTEST_NAME", "http://localhost", TestStatus.Enabled, TestFrequency._5Minutes, TestTimeout._120Seconds, false, RetriesForWebTestFailure.Enable, AuthType.None, "abcdef", TestLocations.AuSydney | TestLocations.BrSaoPaulo, "RESOURCE_GROUP", "Central US")]
+        public async void Given_Parameters_CreateOrUpdateWebTestAsync_ShouldReturn_Result(string name, string url, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, AuthType authType, string accessToken, TestLocations testLocations, string resourceGroup, string location)
         {
             var successCriteria = new Mock<SucessCriteriaElement>();
             successCriteria.SetupGet(p => p.Timeout).Returns(testTimeout);
@@ -341,7 +349,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services.Tests
             var id = Guid.NewGuid();
             var insightsResource = new ResourceBaseExtended(location) { Id = id.ToString(), Name = name };
 
-            var result = await this._service.CreateOrUpdateWebTestAsync(name, url, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false);
+            var result = await this._service.CreateOrUpdateWebTestAsync(name, url, authType, accessToken, this._webTest.Object, this._resourceClient.Object, insightsResource).ConfigureAwait(false);
             result.Location.Should().BeEquivalentTo(location);
         }
 

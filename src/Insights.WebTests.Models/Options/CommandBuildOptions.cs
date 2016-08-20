@@ -28,18 +28,32 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Options
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="TestType"/> value. Default is <c>TestType.UrlPingTest</c>.
+        /// Gets or sets the <see cref="Options.TestType"/> value. Default is <c>TestType.UrlPingTest</c>.
         /// </summary>
         [Option('t', "type", Required = false, DefaultValue = TestType.UrlPingTest, HelpText = "Web test type")]
-        public TestType Type { get; set; }
+        public TestType TestType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the authentication type. Default is <c>AuthType.None</c>.
+        /// </summary>
+        [Option('a', "authtype", Required = false, DefaultValue = AuthType.None, HelpText = "Authentication type")]
+        public AuthType AuthType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the access token value. Default is <c>String.Empty</c>.
+        /// </summary>
+        [Option("token", Required = false, DefaultValue = "", HelpText = "Access token")]
+        public string AccessToken { get; set; }
 
         [HelpOption]
         public static string GetUsage()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("-n|--name\tNameof web test");
-            sb.AppendLine("-u|--url\tURL for web test");
+            sb.AppendLine("-n|--name\tNameof web test.");
+            sb.AppendLine("-u|--url\tURL for web test.");
             sb.AppendLine("-t|--type\tType of web test. Default is UrlPingTest.");
+            sb.AppendLine("-a|--authtype\tType of authentication. Default is None.");
+            sb.AppendLine("--token\tAccess token value. Default is empty.");
 
             return sb.ToString();
         }
