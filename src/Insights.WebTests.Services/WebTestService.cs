@@ -74,7 +74,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 throw new ArgumentNullException(nameof(options));
             }
 
-            return await this.ProcessAsync(options.Name, options.Url, options.Type).ConfigureAwait(false);
+            return await this.ProcessAsync(options.Name, options.Url, options.AuthType, options.AccessToken, options.TestType).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -82,9 +82,11 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// </summary>
         /// <param name="name">Web test name.</param>
         /// <param name="url">Web test URL.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="testType"><see cref="TestType"/> value. Default is <c>TestType.UriPingTest</c>.</param>
         /// <returns>Returns <c>True</c>; if processed successfully; otherwise returns <c>False</c>.</returns>
-        public async Task<bool> ProcessAsync(string name, string url, TestType testType = TestType.UrlPingTest)
+        public async Task<bool> ProcessAsync(string name, string url, AuthType authType = AuthType.None, string accessToken = null, TestType testType = TestType.UrlPingTest)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -109,7 +111,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services
                 return false;
             }
 
-            var webTestResource = await this.CreateOrUpdateWebTestAsync(name, url, webTest, this._resourceManagementClient, insightsResource).ConfigureAwait(false);
+            var webTestResource = await this.CreateOrUpdateWebTestAsync(name, url, authType, accessToken, webTest, this._resourceManagementClient, insightsResource).ConfigureAwait(false);
 
             var result = await this.CreateOrUpdateAlertsAsync(name, webTest, this._insightsManagementClient, webTestResource, insightsResource).ConfigureAwait(false);
 
@@ -180,11 +182,13 @@ namespace Aliencube.Azure.Insights.WebTests.Services
         /// </summary>
         /// <param name="name">Name of the web test.</param>
         /// <param name="url">URL of the web test.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="webTest"><see cref="WebTestElement"/> instance from configuration.</param>
         /// <param name="client"><see cref="IResourceManagementClient"/> instance.</param>
         /// <param name="insightsResource"><see cref="ResourceBaseExtended"/> instance as an Application Insights resource.</param>
         /// <returns>Returns <c>True</c>, if the web test resource creted/updated successfully; otherwise returns <c>False</c>.</returns>
-        public async Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(string name, string url, WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource)
+        public async Task<GenericResourceExtended> CreateOrUpdateWebTestAsync(string name, string url, AuthType authType, string accessToken, WebTestElement webTest, IResourceManagementClient client, ResourceBaseExtended insightsResource)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -221,7 +225,7 @@ namespace Aliencube.Azure.Insights.WebTests.Services
             Console.WriteLine($"Processing web test for {name} started ...");
 #endif
             var resource = new WebTestResource(name, url, insightsResource, webTest.TestType);
-            resource.CreateWebTestProperties(webTest.TestLocations, webTest.Status, webTest.Frequency, webTest.SuccessCriteria.Timeout, webTest.ParseDependentRequests, webTest.RetriesForWebTestFailure);
+            resource.CreateWebTestProperties(webTest.TestLocations, webTest.Status, webTest.Frequency, webTest.SuccessCriteria.Timeout, webTest.ParseDependentRequests, webTest.RetriesForWebTestFailure, authType: authType, accessToken: accessToken);
 
             var result = await client.Resources.CreateOrUpdateAsync(this._appInsights.ResourceGroup, resource.ResourceIdentity, resource).ConfigureAwait(false);
             if (!IsAcceptableHttpStatusCode(result.StatusCode, new[] { HttpStatusCode.OK, HttpStatusCode.Created }))

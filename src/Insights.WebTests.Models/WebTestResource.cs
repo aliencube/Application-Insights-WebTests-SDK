@@ -72,14 +72,16 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
         /// <param name="retriesForWebTestFailure"><see cref="RetriesForWebTestFailure"/> value.</param>
         /// <param name="expectedHttpStatusCode">HTTP status code expected. Default value is <c>200</c>.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="text">Text to find in the validation rule.</param>
-        public void CreateWebTestProperties(TestLocations testLocations, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, int expectedHttpStatusCode = 200, string text = null)
+        public void CreateWebTestProperties(TestLocations testLocations, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, int expectedHttpStatusCode = 200, AuthType authType = AuthType.None, string accessToken = null, string text = null)
         {
             WebTestProperties properties;
             switch (this._testType)
             {
                 case TestType.UrlPingTest:
-                    properties = this.CreatePingWebTestProperties(testLocations, testStatus, testFrequency, testTimeout, parseDependentRequests, retriesForWebTestFailure, expectedHttpStatusCode, text);
+                    properties = this.CreatePingWebTestProperties(testLocations, testStatus, testFrequency, testTimeout, parseDependentRequests, retriesForWebTestFailure, expectedHttpStatusCode, authType, accessToken, text);
                     break;
 
                 case TestType.MultiStepTest:
@@ -103,7 +105,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
             this.Tags.Add($"hidden-link:{this._insights.Id}", "Resource");
         }
 
-        private PingWebTestProperties CreatePingWebTestProperties(TestLocations testLocations, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, int expectedHttpStatusCode = 200, string text = null)
+        private PingWebTestProperties CreatePingWebTestProperties(TestLocations testLocations, TestStatus testStatus, TestFrequency testFrequency, TestTimeout testTimeout, bool parseDependentRequests, RetriesForWebTestFailure retriesForWebTestFailure, int expectedHttpStatusCode = 200, AuthType authType = AuthType.None, string accessToken = null, string text = null)
         {
             var properties = new PingWebTestProperties()
                                  {
@@ -114,7 +116,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models
                                      TestTimeout = testTimeout,
                                      EnableRetriesForWebTestFailure = retriesForWebTestFailure,
                                      Locations = WebTestLocations.GetWebTestLocations(testLocations),
-                                     Configuration = new PingWebTestConfiguration(this._name, this._url, (int)testTimeout, parseDependentRequests, expectedHttpStatusCode, text),
+                                     Configuration = new PingWebTestConfiguration(this._name, this._url, (int)testTimeout, parseDependentRequests, expectedHttpStatusCode, authType, accessToken, text),
                                      SyntheticMonitorId = this._syntheticMonitorId,
                                  };
             return properties;

@@ -12,7 +12,7 @@ IF NOT EXIST %MSBUILDDIR%msbuild.exe goto MissingMSBuildExe
 
 ::BUILD
 "tools\nuget.exe" restore Azure.Insights.WebTests.Sdk.sln
-"%MSBUILDDIR%msbuild.exe" Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5;DefineConstants="TRACE";OutPutPath=bin\Release\net45\
+"%MSBUILDDIR%msbuild.exe" Azure.Insights.WebTests.Sdk.sln /t:ReBuild /v:minimal /p:Configuration=Release;TargetFrameworkVersion=v4.5.1;DefineConstants="TRACE";OutPutPath=bin\Release\net451\
 
 mkdir build
 del "build\*.nupkg"

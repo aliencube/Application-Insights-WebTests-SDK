@@ -2,7 +2,7 @@ using System;
 using System.Net;
 
 using Aliencube.Azure.Insights.WebTests.Models.Exceptions;
-using Aliencube.Azure.Insights.WebTests.Models.Extensions;
+using Aliencube.Azure.Insights.WebTests.Models.Options;
 using Aliencube.Azure.Insights.WebTests.Models.Serialisation;
 
 namespace Aliencube.Azure.Insights.WebTests.Models
@@ -22,8 +22,10 @@ namespace Aliencube.Azure.Insights.WebTests.Models
         /// <param name="timeout">Timeout value.</param>
         /// <param name="parseDependentRequests">Value indicating whether to parse dependent requests or not.</param>
         /// <param name="expectedHttpStatusCode">Expected HTTP status code. This SHOULD be <c>0</c>, if it's not required.</param>
+        /// <param name="authType"><see cref="AuthType"/> value.</param>
+        /// <param name="accessToken">Access token value.</param>
         /// <param name="text">Text to find in the validation rule.</param>
-        public PingWebTestConfiguration(string name, string url, int timeout, bool parseDependentRequests, int expectedHttpStatusCode, string text = null)
+        public PingWebTestConfiguration(string name, string url, int timeout, bool parseDependentRequests, int expectedHttpStatusCode, AuthType authType = AuthType.None, string accessToken = null, string text = null)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -50,12 +52,12 @@ namespace Aliencube.Azure.Insights.WebTests.Models
                 throw new InvalidHttpStatusCodeException();
             }
 
-            this._test = new WebTest(name, url, timeout, parseDependentRequests, expectedHttpStatusCode, text);
+            this._test = new WebTest(name, url, timeout, parseDependentRequests, expectedHttpStatusCode, authType, accessToken, text);
         }
 
         /// <summary>
         /// Gets the web test XML serialised value.
         /// </summary>
-        public override string WebTest => this._test.ToXml();
+        public override string WebTest => this._test;
     }
 }

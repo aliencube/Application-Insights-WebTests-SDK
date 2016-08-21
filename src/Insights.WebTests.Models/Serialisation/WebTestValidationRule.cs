@@ -46,40 +46,40 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Serialisation
         }
 
         /// <summary>
-        /// Gets the class name. This is always <c>Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleFindText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</c>.
+        /// Gets or sets the class name. This is always <c>Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleFindText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</c>.
         /// </summary>
         [XmlAttribute()]
-        public string Classname { get; }
+        public string Classname { get; set; }
 
         /// <summary>
-        /// Gets the display name. This is always <c>Find Text</c>.
+        /// Gets or sets the display name. This is always <c>Find Text</c>.
         /// </summary>
         [XmlAttribute()]
-        public string DisplayName { get; }
+        public string DisplayName { get; set; }
 
         /// <summary>
-        /// Gets the description. This is always <c>Verifies the existence of the specified text in the response.</c>.
+        /// Gets or sets the description. This is always <c>Verifies the existence of the specified text in the response.</c>.
         /// </summary>
         [XmlAttribute()]
-        public string Description { get; }
+        public string Description { get; set; }
 
         /// <summary>
-        /// Gets the validation level. This is always <c>High</c>.
+        /// Gets or sets the validation level. This is always <c>High</c>.
         /// </summary>
         [XmlAttribute()]
-        public string Level { get; }
+        public string Level { get; set; }
 
         /// <summary>
-        /// Gets the execution order. This is always <c>BeforeDependents</c>.
+        /// Gets or sets the execution order. This is always <c>BeforeDependents</c>.
         /// </summary>
         [XmlAttribute()]
-        public string ExectuionOrder { get; }
+        public string ExectuionOrder { get; set; }
 
         /// <summary>
-        /// Gets the list of the <see cref="WebTestValidationRuleParameter"/> objects.
+        /// Gets or sets the list of the <see cref="WebTestValidationRuleParameter"/> objects.
         /// </summary>
         [XmlArray("RuleParameters", IsNullable = false)]
         [XmlArrayItem("RuleParameter", IsNullable = false)]
-        public List<WebTestValidationRuleParameter> RuleParameters { get; }
+        public List<WebTestValidationRuleParameter> RuleParameters { get; set; }
     }
 }

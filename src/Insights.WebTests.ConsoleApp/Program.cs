@@ -18,9 +18,25 @@ namespace Aliencube.Azure.Insights.WebTests.ConsoleApp
         /// <param name="args">List of arguments.</param>
         public static void Main(string[] args)
         {
-            Console.WriteLine("Processing started ...");
+            Console.WriteLine("Web Test Generator for Azure Application Insights");
+            Console.WriteLine();
 
-            var options = CommandBuildOptions.Build(args);
+            CommandBuildOptions options;
+            try
+            {
+                options = CommandBuildOptions.Build(args);
+            }
+            catch
+            {
+                Console.WriteLine(CommandBuildOptions.GetUsage());
+#if DEBUG
+                Console.WriteLine("Press any key to complete the process");
+                Console.ReadLine();
+#endif
+                return;
+            }
+
+            Console.WriteLine("Processing started ...");
 
             using (var settings = WebTestSettingsElement.CreateInstance())
             using (var context = new AuthenticationContextWrapper($"{settings.Authentication.AadInstanceUrl.TrimEnd('/')}/{settings.Authentication.TenantName}.onmicrosoft.com", false))

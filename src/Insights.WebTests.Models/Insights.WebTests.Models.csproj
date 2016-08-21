@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Aliencube.Azure.Insights.WebTests.Models</RootNamespace>
     <AssemblyName>Aliencube.Azure.Insights.WebTests.Models</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,7 +50,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.Insights, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Insights.0.11.0-preview\lib\net45\Microsoft.Azure.Insights.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Azure.Insights.0.13.1-preview\lib\net45\Microsoft.Azure.Insights.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -88,8 +89,8 @@
       <HintPath>..\..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -122,6 +123,7 @@
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="MultiStepWebTestConfiguration.cs" />
     <Compile Include="MultiStepWebTestProperties.cs" />
+    <Compile Include="Options\AuthType.cs" />
     <Compile Include="Options\CommandBuildOptions.cs" />
     <Compile Include="Options\TestAlertFailureTimeWindow.cs" />
     <Compile Include="PingWebTestConfiguration.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="Options\TestLocations.cs" />
     <Compile Include="Options\TestTimeout.cs" />
     <Compile Include="Serialisation\WebTest.cs" />
+    <Compile Include="Serialisation\WebTestItemRequestHeader.cs" />
     <Compile Include="WebTestConfiguration.cs" />
     <Compile Include="Options\TestKind.cs" />
     <Compile Include="Extensions\WebTestExtensions.cs" />
