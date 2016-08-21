@@ -20,11 +20,11 @@
     <copyright>Aliencube Community. All rights reserved.</copyright>
     <tags>Aliencube, ApplicationInsights, Azure, WebTests, Alerts, .NET</tags>
     <dependencies>
-      <dependency id="Aliencube.AdalWrapper" version="1.0.0.5" />
+      <dependency id="Aliencube.AdalWrapper" version="1.0.0.15" />
       <dependency id="Aliencube.ConfigurationValueConverter" version="1.0.0.4" />
       <dependency id="CommandLineParser" version="1.9.71" />
       <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
-      <dependency id="Microsoft.Azure.Insights" version="0.11.0-preview" />
+      <dependency id="Microsoft.Azure.Insights" version="0.13.1-preview" />
       <dependency id="Microsoft.Azure.Management.Resources" version="2.20.0-preview" />
     </dependencies>
   </metadata>
