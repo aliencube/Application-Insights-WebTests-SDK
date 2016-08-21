@@ -53,7 +53,7 @@ namespace Aliencube.Azure.Insights.WebTests.Models.Options
             sb.AppendLine("-u|--url\tURL for web test.");
             sb.AppendLine("-t|--type\tType of web test. Default is UrlPingTest.");
             sb.AppendLine("-a|--authtype\tType of authentication. Default is None.");
-            sb.AppendLine("--token\tAccess token value. Default is empty.");
+            sb.AppendLine("--token\t\tAccess token value. Default is empty.");
 
             return sb.ToString();
         }
